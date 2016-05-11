@@ -22,7 +22,7 @@ namespace GameProject
 		{
 			MoveForward(5);
 
-			if (X < -lifeArea || X > lifeArea || Y < -lifeArea || Y > lifeArea) OnNotInAllowedArea();
+			if (Position.X < -lifeArea || Position.X > lifeArea || Position.Y < -lifeArea || Position.Y > lifeArea) OnNotInAllowedArea();
 		}
 
 		private void OnNotInAllowedArea()

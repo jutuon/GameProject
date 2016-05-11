@@ -94,23 +94,23 @@ namespace GameProject
 			playerText = new TextObject(font);
 
 			TextObject cameraText = new TextObject(font);
-			cameraText.X += 150; window.Add(cameraText);
+			cameraText.Position += new Vector2(200,0); window.Add(cameraText);
 
 			debugText = new TextObject(font);
-			debugText.X -= 50;
+			debugText.Position -= new Vector2(50,0);
 			window.Add(playerText); window.Add(debugText);
 			window.PositionX = WindowPositionX.Center;
 
 			player.ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				Player p = (Player) sender;
-				playerText.Text = "X: " + p.X + "\nY: " + p.Y;
+				playerText.Text = p.Position + "";
 			};
 
 			camera.ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				GameObject p = (GameObject) sender;
-				cameraText.Text = "Camera: \nX: " + p.X + "\nY: " + p.Y;
+				cameraText.Text = "Camera: \n" + p.Position;
 			};
 
 			camera.Follow(player);

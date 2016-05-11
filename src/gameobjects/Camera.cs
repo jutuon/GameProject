@@ -20,30 +20,26 @@ namespace GameProject
 
 		public Vector2? ToScreenCoordinants(DrawableGameObject gameObject)
 		{
-			float xDistance = 0, yDistance = 0;
 
-			xDistance = gameObject.X - X;
-			yDistance = -(gameObject.Y - Y);
-			if (Math.Abs(xDistance) > width + gameObject.Texture.Width || Math.Abs(yDistance) > heigth + gameObject.Texture.Height) return null;
+			Vector2 screenPosition = (gameObject.Position - Position) * new Vector2(1,-1);
+			//check if out of object out of camera area
+			if (Math.Abs(screenPosition.X) > width + gameObject.Texture.Width || Math.Abs(screenPosition.Y) > heigth + gameObject.Texture.Height) return null;
 
-			int screenCenterX = Window.ClientBounds.Width/2;
-			int screenCenterY = Window.ClientBounds.Height/2;
+			//move to center
+			Vector2 screenCenter = new Vector2(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
 
-			return new Vector2(xDistance + screenCenterX, yDistance + screenCenterY);
+			return screenPosition + screenCenter;
 		}
 
-		public Vector2? ToScreenCoordinants(float x, float y)
+		public Vector2? ToScreenCoordinants(Vector2 position)
 		{
-			float xDistance = 0, yDistance = 0;
 
-			xDistance = x - X;
-			yDistance = y - Y;
-			if (Math.Abs(xDistance) > width || Math.Abs(yDistance) > heigth) return null;
+			Vector2 screenPosition = (position - this.Position) * new Vector2(1,-1);
+			if (Math.Abs(screenPosition.X) > width || Math.Abs(screenPosition.Y) > heigth) return null;
+			//move to center
+			Vector2 screenCenter = new Vector2(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
 
-			int screenCenterX = Window.ClientBounds.Width/2;
-			int screenCenterY = Window.ClientBounds.Height/2;
-
-			return new Vector2(xDistance + screenCenterX, yDistance + screenCenterY);
+			return screenPosition + screenCenter;
 		}
 
 		public void Follow(GameObject gameobject)
@@ -60,7 +56,7 @@ namespace GameProject
 		private void CopyPosition(object sender, EventArgs e)
 		{
 			GameObject player = (GameObject) sender;
-			X = player.X; Y = player.Y;
+			Position = player.Position;
 		}
 
 	}

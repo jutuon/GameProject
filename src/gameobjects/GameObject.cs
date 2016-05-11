@@ -7,22 +7,20 @@ namespace GameProject
 	public abstract class GameObject : IUpdateable
 	{
 
-		public float X { get; protected set;}
-		public float Y { get; protected set;}
+		public Vector2 Position { get; protected set;}
 		public float Angle { get; protected set;}
 
 		public event EventHandler ObjectMoved;
 
 		public GameObject()
 		{
-			X = 0;
-			Y = 0;
+			Position = new Vector2(0, 0);
 			Angle = 0;
 		}
 
 		public void Move(float x, float y)
 		{
-			X += x; Y += y;
+			Position += new Vector2(x, y);
 			OnObjectMoved();
 		}
 
@@ -38,8 +36,7 @@ namespace GameProject
 
 		public void CloneState(GameObject gameobject)
 		{
-			X = gameobject.X;
-			Y = gameobject.Y;
+			Position = gameobject.Position;
 			Angle = gameobject.Angle;
 		}
 

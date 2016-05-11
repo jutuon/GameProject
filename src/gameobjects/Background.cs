@@ -31,12 +31,10 @@ namespace GameProject
 			}
 
 
-			float x = (camera.X - camera.Window.ClientBounds.Width) / Texture.Width;
-			float y = (camera.Y - camera.Window.ClientBounds.Height) / Texture.Height;
+			float x = (camera.Position.X - camera.Window.ClientBounds.Width) / Texture.Width;
+			float y = (camera.Position.Y - camera.Window.ClientBounds.Height) / Texture.Height;
 
-			//Console.WriteLine(x + ", " + y);
-
-			Vector2? convertedCoordinates = camera.ToScreenCoordinants(x, y);
+			Vector2? convertedCoordinates = camera.ToScreenCoordinants(new Vector2(x,y));
 			if (convertedCoordinates == null) return;
 
 			Vector2 location = (Vector2) convertedCoordinates;

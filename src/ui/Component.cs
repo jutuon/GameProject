@@ -7,12 +7,11 @@ namespace GameProject
 	public abstract class Component
 	{
 
-		public float X {get; set;}
-		public float Y {get; set;}
+		public Vector2 Position {get; set;}
 
 		public Component()
 		{
-			X = 0; Y = 0;
+			Position = new Vector2(0,0);
 		}
 
 		public abstract void Draw(SpriteBatch spriteBatch, Vector2 parentLocation);

@@ -21,8 +21,7 @@ namespace GameProject
 	public class InGameWindow
 	{
 		private List<Component> list;
-		public float X { get; set;}
-		public float Y { get; set;}
+		public Vector2 Position { get; set;}
 
 		public bool IsVisible { get; set;}
 		public WindowPositionX PositionX { get; set;}
@@ -34,6 +33,8 @@ namespace GameProject
 
 		public InGameWindow(GameWindow window)
 		{
+			Position = new Vector2(0, 0);
+
 			list = new List<Component>();
 			IsVisible = true;
 			this.window = window;
@@ -68,11 +69,11 @@ namespace GameProject
 			
 		private Vector2 CalculatePositionedCoordinates()
 		{
-			float x = X;
+			float x = Position.X;
 			if (PositionX == WindowPositionX.Right) x += window.ClientBounds.Width;
 			else if (PositionX == WindowPositionX.Center) x += window.ClientBounds.Width/2;
 
-			float y = Y;
+			float y = Position.Y;
 			if (PositionY == WindowPositionY.Bottom) x += window.ClientBounds.Height;
 			else if (PositionY == WindowPositionY.Center) x += window.ClientBounds.Height/2;
 

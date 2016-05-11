@@ -18,7 +18,7 @@ namespace GameProject
 
 		public override void Draw(SpriteBatch spriteBatch, Vector2 parentLocation)
 		{
-			Vector2 location = new Vector2(X,Y) + parentLocation;
+			Vector2 location = Position + parentLocation;
 			spriteBatch.DrawString(Font, Text, location, Color.White);
 		}
 	}
