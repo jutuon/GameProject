@@ -105,7 +105,7 @@ namespace GameProject
 			debugText = new TextObject(font);
 			debugText.Position -= new Vector2(50,0);
 			window.Add(playerText); window.Add(debugText);
-			window.PositionX = WindowPositionX.Center;
+			window.AlignmentX = WindowAlignmentX.Center;
 
 			player.ObjectMoved += delegate(object sender, EventArgs e)
 			{
