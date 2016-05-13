@@ -53,7 +53,7 @@ namespace GameProject
 			// TODO: Add your initialization logic here
 			camera = new Camera(Window.ClientBounds.Width,Window.ClientBounds.Height, Window);
 
-
+			IsMouseVisible = true;
 			base.Initialize();
 		}
 
