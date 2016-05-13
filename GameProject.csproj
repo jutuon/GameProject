@@ -51,23 +51,23 @@
     <Compile Include="src\gameobjects\Player.cs" />
     <Compile Include="src\gameobjects\Box.cs" />
     <Compile Include="src\gameobjects\Camera.cs" />
-    <Compile Include="src\tools\TextureContainer.cs" />
     <Compile Include="src\tools\IDrawable.cs" />
     <Compile Include="src\gameobjects\Background.cs" />
     <Compile Include="src\gameobjects\Asteroid.cs" />
     <Compile Include="src\gameobjects\Laser.cs" />
-    <Compile Include="src\tools\ArrayContainer.cs" />
     <Compile Include="src\tools\IUpdateable.cs" />
     <Compile Include="src\ui\Component.cs" />
     <Compile Include="src\ui\TextObject.cs" />
     <Compile Include="src\ui\InGameWindow.cs" />
-    <Compile Include="src\tools\GameObjectContainer.cs" />
     <Compile Include="src\GameProject.cs" />
     <Compile Include="src\tools\CollisionEngine.cs" />
-    <Compile Include="src\gameobjects\BasicGameObject.cs" />
-    <Compile Include="src\gameobjects\GameObject.cs" />
-    <Compile Include="src\gameobjects\DrawableBasicGameObject.cs" />
-    <Compile Include="src\tools\DrawableBasicGameObjectContainer.cs" />
+    <Compile Include="src\tools\containers\ArrayContainer.cs" />
+    <Compile Include="src\tools\containers\TextureContainer.cs" />
+    <Compile Include="src\tools\containers\GameObjectContainer.cs" />
+    <Compile Include="src\tools\containers\DrawableBasicGameObjectContainer.cs" />
+    <Compile Include="src\gameobjects\baseobjects\BasicGameObject.cs" />
+    <Compile Include="src\gameobjects\baseobjects\DrawableBasicGameObject.cs" />
+    <Compile Include="src\gameobjects\baseobjects\GameObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />
@@ -90,5 +90,7 @@
     <Folder Include="src\gameobjects\" />
     <Folder Include="src\tools\" />
     <Folder Include="src\ui\" />
+    <Folder Include="src\tools\containers\" />
+    <Folder Include="src\gameobjects\baseobjects\" />
   </ItemGroup>
 </Project>
