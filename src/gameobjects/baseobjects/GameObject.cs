@@ -22,9 +22,9 @@ namespace GameProject
 			collisions = new List<CollisionSetting>();
 		}
 
-		public override void Move(float x, float y)
+		public override void Move(Vector2 amount)
 		{
-			Vector2 newPosition = new Vector2(x, y) + Position;
+			Vector2 newPosition = amount + Position;
 
 			if(collisionEngine.CheckCollision(this, newPosition, collisions)) return;
 

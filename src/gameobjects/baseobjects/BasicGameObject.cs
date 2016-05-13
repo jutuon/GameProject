@@ -22,16 +22,21 @@ namespace GameProject
 			Angle = 0;
 		}
 
-		public virtual void Move(float x, float y)
+		public virtual void Move(Vector2 amount)
 		{
-			Position += new Vector2(x, y);
+			Position += amount;
 			OnObjectMoved();
 		}
 
-		public void MoveForward(float ammount)
+		public void Move(float x, float y)
 		{
-			float x = (float) Math.Cos(Angle)*ammount;
-			float y = (float) Math.Sin(Angle)*ammount;
+			Move(new Vector2(x, y));
+		}
+
+		public void MoveForward(float amount)
+		{
+			float x = (float) Math.Cos(Angle)*amount;
+			float y = (float) Math.Sin(Angle)*amount;
 
 			Move(x, -y);
 		}
