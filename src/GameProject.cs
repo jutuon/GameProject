@@ -78,12 +78,12 @@ namespace GameProject
 			player = new Player(textureContainer[AvailibleTextures.SpaceShip], textureContainer[AvailibleTextures.Laser], collisionEngine);
 			player.ForceMove(new Vector2(0, 25));
 
-			for (int i = 0; i < 50; i++)
+			for (int i = 0; i < 1; i++)
 			{
 				Asteroid asteroid = new Asteroid(textureContainer[AvailibleTextures.Asteroid], collisionEngine);
 				asteroids.Add(asteroid);
-				collisionEngine.CreateAndAddCollisionHandler(player, asteroid, CollisionType.Rectangle, true);
-				asteroid.ForceMove(new Vector2(colum * 150, row * 150));
+				collisionEngine.CreateAndAddCollisionHandler(player, asteroid, CollisionType.Circle, true);
+				asteroid.ForceMove(new Vector2(150, 50));
 				colum++;
 				if (colum > 2)
 				{

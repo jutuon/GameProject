@@ -7,12 +7,12 @@ namespace GameProject
 
 	public enum CollisionType 
 	{
-		Rectangle, Circle
+		Rectangle, Circle, Eclipce
 	}
 
 	public class CollisionSetting 
 	{
-		public bool Deleted { get; set;}
+		public bool Deleted { get; set;} //TODO:implement removing collisions
 		public GameObject Target1 { get; private set;}
 		public GameObject Target2 { get; private set;}
 		public CollisionType CollisionType { get; set;}
@@ -50,6 +50,13 @@ namespace GameProject
 			
 
 
+		/// <summary>
+		/// Checks the collision.
+		/// </summary>
+		/// <returns><c>true</c>, if collision found, <c>false</c> otherwise.</returns>
+		/// <param name="toBeMoved">GameObject that will be moved.</param>
+		/// <param name="newPosition">The new position of GameObject after moving</param>
+		/// <param name="list">List of GameObject's CollisionSettings</param>
 		public bool CheckCollision(GameObject toBeMoved, Vector2 newPosition, List<CollisionSetting> list)
 		{
 
@@ -57,9 +64,15 @@ namespace GameProject
 			{
 				GameObject target = collisionSetting.ReturnTheOther(toBeMoved);
 
+				bool result = false;
 
-				float distance = Vector2.Distance(toBeMoved.Position+newPosition, target.Position);
-				if (distance < 25) return true;
+				if (collisionSetting.CollisionType == CollisionType.Circle) 
+					result = CheckCircleCollision(toBeMoved, newPosition, target);
+				//else if (collisionSetting.CollisionType == CollisionType.Rectangle) ;
+				//else if (collisionSetting.CollisionType == CollisionType.Eclipce) ;
+					
+				
+				if (result) return true;
 
 			}
 
@@ -67,9 +80,28 @@ namespace GameProject
 
 		}
 
-		public void CheckRectangleCollision()
+		public bool CheckCircleCollision(GameObject toBeMoved, Vector2 newPosition, GameObject target)
 		{
+			float offset = Math.Max(toBeMoved.Width, toBeMoved.Heigth);
+			float targetoffset = Math.Max(target.Width, target.Heigth);
+
+			/*
+			float moveAngle = (float)Math.Acos(toBeMoved.Position.X - newPosition.X);
+
 			
+
+			float totalOffsetX = (float) Math.Cos(moveAngle) * (offset + targetoffset);
+			float totalOffsetY = (float) Math.Sin(moveAngle) * (offset + targetoffset);
+
+			newPosition = newPosition + new Vector2(totalOffsetX, -totalOffsetY);
+			*/
+
+			Console.WriteLine(offset + targetoffset);
+
+			float distance = Vector2.Distance(newPosition, target.Position);
+			if (distance < (offset + targetoffset) / 2) return true;
+
+			return false;
 		}
 
 		public void CreateAndAddCollisionHandler(GameObject gameObject, GameObject gameObject2, CollisionType collisionType, bool checkBoth = false)

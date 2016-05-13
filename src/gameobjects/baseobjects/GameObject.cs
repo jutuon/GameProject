@@ -18,6 +18,8 @@ namespace GameProject
 
 		public GameObject(Texture2D texture, CollisionEngine engine) : base(texture)
 		{
+			Width = texture.Width;
+			Heigth = texture.Height;
 			collisionEngine = engine;
 			collisions = new List<CollisionSetting>();
 		}
