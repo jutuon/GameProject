@@ -5,14 +5,14 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject
 {
-	public class Player : DrawableGameObject
+	public class Player : GameObject
 	{
 
 		private Texture2D laserTexture;
 		private double lastShotTime;
 
 
-		public Player(Texture2D texture, Texture2D laser) : base(texture)
+		public Player(Texture2D texture, Texture2D laser, CollisionEngine engine) : base(texture, engine)
 		{
 			laserTexture = laser;
 		}
@@ -22,7 +22,7 @@ namespace GameProject
 		{
 			if (time.TotalGameTime.TotalSeconds < lastShotTime + 0.2) return;
 
-			Laser laser = new Laser(laserTexture, this);
+			Laser laser = new Laser(laserTexture, this, collisionEngine);
 			laser.MoveForward(5);
 
 			lastShotTime = time.TotalGameTime.TotalSeconds;

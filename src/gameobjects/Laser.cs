@@ -4,14 +4,14 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject
 {
-	public class Laser : DrawableGameObject
+	public class Laser : GameObject
 	{ 
 		private float lifeArea;
 		private String tag;
 
 		public event EventHandler NotInAllowedArea;
 
-		public Laser(Texture2D texture, GameObject parent) : base(texture)
+		public Laser(Texture2D texture, BasicGameObject parent, CollisionEngine engine) : base(texture, engine)
 		{
 			CloneState(parent);
 			lifeArea = 500;

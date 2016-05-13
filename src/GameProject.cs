@@ -16,11 +16,13 @@ namespace GameProject
 	/// </summary>
 	public class GameProject : Game
 	{
+		private CollisionEngine collisionEngine;
+
 		private Camera camera;
 		private Player player;
 		private Background background;
-		private DrawableGameObjectContainer<Asteroid> asteroids = new DrawableGameObjectContainer<Asteroid>();
-		private DrawableGameObjectContainer<Laser> lasers = new DrawableGameObjectContainer<Laser>();
+		private DrawableBasicGameObjectContainer<Asteroid> asteroids = new DrawableBasicGameObjectContainer<Asteroid>();
+		private DrawableBasicGameObjectContainer<Laser> lasers = new DrawableBasicGameObjectContainer<Laser>();
 
 		private SpriteFont font;
 
@@ -61,6 +63,7 @@ namespace GameProject
 		/// </summary>
 		protected override void LoadContent()
 		{
+			collisionEngine = new CollisionEngine();
 
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -72,12 +75,15 @@ namespace GameProject
 			int colum = -2;
 			int row = -5;
 
+			player = new Player(textureContainer[AvailibleTextures.SpaceShip], textureContainer[AvailibleTextures.Laser], collisionEngine);
+			player.ForceMove(new Vector2(0, 25));
+
 			for (int i = 0; i < 50; i++)
 			{
-				Asteroid asteroid = new Asteroid(textureContainer[AvailibleTextures.Asteroid]);
+				Asteroid asteroid = new Asteroid(textureContainer[AvailibleTextures.Asteroid], collisionEngine);
 				asteroids.Add(asteroid);
-
-				asteroid.Move(colum * 150, row * 150);
+				collisionEngine.CreateAndAddCollisionHandler(player, asteroid, CollisionType.Rectangle, true);
+				asteroid.ForceMove(new Vector2(colum * 150, row * 150));
 				colum++;
 				if (colum > 2)
 				{
@@ -87,8 +93,8 @@ namespace GameProject
 
 			};
 
-			player = new Player(textureContainer[AvailibleTextures.SpaceShip], textureContainer[AvailibleTextures.Laser]);
-			background = new Background(textureContainer[AvailibleTextures.StarBackground]);
+
+			background = new Background(textureContainer[AvailibleTextures.StarBackground], collisionEngine);
 
 			window = new InGameWindow(Window);
 			playerText = new TextObject(font);
@@ -109,7 +115,7 @@ namespace GameProject
 
 			camera.ObjectMoved += delegate(object sender, EventArgs e)
 			{
-				GameObject p = (GameObject) sender;
+				BasicGameObject p = (BasicGameObject) sender;
 				cameraText.Text = "Camera: \n" + p.Position;
 			};
 
@@ -173,7 +179,6 @@ namespace GameProject
 
 			asteroids.Draw(spriteBatch, gameTime, camera);
 			lasers.Draw(spriteBatch, gameTime, camera);
-
 
 			window.Draw(spriteBatch);
 

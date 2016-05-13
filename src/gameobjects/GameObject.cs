@@ -1,51 +1,43 @@
 ﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject
 {
-	public abstract class GameObject : IUpdateable
+	/// <summary>
+	/// Game object with collision handling
+	/// </summary>
+	public abstract class GameObject : DrawableBasicGameObject
 	{
+		public float Width { get; protected set;}
+		public float Heigth { get; protected set;}
 
-		public Vector2 Position { get; protected set;}
-		public float Angle { get; protected set;}
+		private List<CollisionSetting> collisions; //TODO: change collision setting saving to better data structure than list?
+		protected CollisionEngine collisionEngine;
 
-		public event EventHandler ObjectMoved;
-
-		public GameObject()
+		public GameObject(Texture2D texture, CollisionEngine engine) : base(texture)
 		{
-			Position = new Vector2(0, 0);
-			Angle = 0;
+			collisionEngine = engine;
+			collisions = new List<CollisionSetting>();
 		}
 
-		public void Move(float x, float y)
+		public override void Move(float x, float y)
 		{
-			Position += new Vector2(x, y);
-			OnObjectMoved();
+			Vector2 newPosition = new Vector2(x, y) + Position;
+
+			if(collisionEngine.CheckCollision(this, newPosition, collisions)) return;
+
+			Position = newPosition;
 		}
 
-		public void MoveForward(float ammount)
+		public void ForceMove(Vector2 amount)
 		{
-			float x = (float) Math.Cos(Angle)*ammount;
-			float y = (float) Math.Sin(Angle)*ammount;
-
-			Move(x, -y);
+			Position = Position + amount;
 		}
 
-		public void Turn(float radians) { Angle += radians;}
-
-		public void CloneState(GameObject gameobject)
-		{
-			Position = gameobject.Position;
-			Angle = gameobject.Angle;
-		}
-
-		public virtual void Update(GameTime time) {}
-
-		private void OnObjectMoved()
-		{
-			EventHandler handler = ObjectMoved;
-			if (handler != null) handler(this, null);
+		public void AddCollisionHandler(CollisionSetting setting) {
+			collisions.Add(setting);
 		}
 	}
 }

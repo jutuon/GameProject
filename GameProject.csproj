@@ -49,10 +49,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\gameobjects\Player.cs" />
-    <Compile Include="src\gameobjects\GameObject.cs" />
     <Compile Include="src\gameobjects\Box.cs" />
     <Compile Include="src\gameobjects\Camera.cs" />
-    <Compile Include="src\gameobjects\DrawableGameObject.cs" />
     <Compile Include="src\tools\TextureContainer.cs" />
     <Compile Include="src\tools\IDrawable.cs" />
     <Compile Include="src\gameobjects\Background.cs" />
@@ -63,9 +61,13 @@
     <Compile Include="src\ui\Component.cs" />
     <Compile Include="src\ui\TextObject.cs" />
     <Compile Include="src\ui\InGameWindow.cs" />
-    <Compile Include="src\tools\DrawableGameObjectContainer.cs" />
     <Compile Include="src\tools\GameObjectContainer.cs" />
     <Compile Include="src\GameProject.cs" />
+    <Compile Include="src\tools\CollisionEngine.cs" />
+    <Compile Include="src\gameobjects\BasicGameObject.cs" />
+    <Compile Include="src\gameobjects\GameObject.cs" />
+    <Compile Include="src\gameobjects\DrawableBasicGameObject.cs" />
+    <Compile Include="src\tools\DrawableBasicGameObjectContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

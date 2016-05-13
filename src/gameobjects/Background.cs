@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject
 {
-	public class Background : DrawableGameObject
+	public class Background : DrawableBasicGameObject
 	{
 
 		public bool IsStatic { get; set;}
 
-		public Background(Texture2D texture) : base(texture)
+		public Background(Texture2D texture, CollisionEngine engine) : base(texture)
 		{
 			IsStatic = true;
 		}

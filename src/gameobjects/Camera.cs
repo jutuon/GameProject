@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject
 {
-	public class Camera : GameObject
+	public class Camera : BasicGameObject
 	{
 		private int width, heigth;
 		public GameWindow Window { get; private set;}
 
-		private GameObject currentlyFollowing;
+		private BasicGameObject currentlyFollowing;
 
 		public Camera(int width, int heigth, GameWindow window)
 		{
@@ -18,8 +18,9 @@ namespace GameProject
 		}
 
 
-		public Vector2? ToScreenCoordinants(DrawableGameObject gameObject)
+		public Vector2? ToScreenCoordinants(DrawableBasicGameObject gameObject)
 		{
+			//TODO: change null returning to exeption?
 
 			Vector2 screenPosition = (gameObject.Position - Position) * new Vector2(1,-1);
 			//check if out of object out of camera area
@@ -42,7 +43,7 @@ namespace GameProject
 			return screenPosition + screenCenter;
 		}
 
-		public void Follow(GameObject gameobject)
+		public void Follow(BasicGameObject gameobject)
 		{
 
 			//TODO: what if followed object is removed?
@@ -55,7 +56,7 @@ namespace GameProject
 
 		private void CopyPosition(object sender, EventArgs e)
 		{
-			GameObject player = (GameObject) sender;
+			BasicGameObject player = (BasicGameObject) sender;
 			Position = player.Position;
 		}
 

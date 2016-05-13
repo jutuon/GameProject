@@ -4,12 +4,11 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject
 {
-	public abstract class DrawableGameObject : GameObject, IDrawable
+	public class DrawableBasicGameObject : BasicGameObject, IDrawable
 	{
-		
 		public Texture2D Texture { get; private set;}
 
-		public DrawableGameObject(Texture2D texture)
+		public DrawableBasicGameObject(Texture2D texture)
 		{
 			Texture = texture;	
 		}

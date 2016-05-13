@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject
 {
-	public class Asteroid  : DrawableGameObject
+	public class Asteroid  : GameObject
 	{
-		public Asteroid(Texture2D texture) : base(texture)
+		public Asteroid(Texture2D texture, CollisionEngine engine) : base(texture, engine)
 		{
 			
 		}

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject
 {
-	public class GameObjectContainer<T> : IUpdateable where T : GameObject
+	public class GameObjectContainer<T> : IUpdateable where T : BasicGameObject
 	{
 
 		protected List<T> list;

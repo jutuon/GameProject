@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject
 {
-	public class DrawableGameObjectContainer<T> : GameObjectContainer<T>, IDrawable where T : DrawableGameObject
+	public class DrawableBasicGameObjectContainer<T> : GameObjectContainer<T>, IDrawable where T : DrawableBasicGameObject
 	{
 		public void Draw(SpriteBatch spriteBatch, GameTime time, Camera camera)
 		{

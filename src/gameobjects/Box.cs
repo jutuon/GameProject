@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject
 {
-	public class Box : DrawableGameObject
+	public class Box : GameObject
 	{
 
-		public Box(Texture2D texture) : base(texture)
+		public Box(Texture2D texture , CollisionEngine engine) : base(texture , engine)
 		{
 			
 		}
