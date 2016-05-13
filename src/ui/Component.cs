@@ -4,9 +4,16 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject
 {
+	/// <summary>
+	/// Base class for user interface components
+	/// </summary>
 	public abstract class Component
 	{
 
+		/// <summary>
+		/// Gets or sets the position on the screen.
+		/// </summary>
+		/// <value>The position.</value>
 		public Vector2 Position {get; set;}
 
 		public Component()
@@ -14,6 +21,11 @@ namespace GameProject
 			Position = new Vector2(0,0);
 		}
 
+		/// <summary>
+		/// Draw the Component with specified spriteBatch and parentLocation.
+		/// </summary>
+		/// <param name="spriteBatch">Sprite batch.</param>
+		/// <param name="parentLocation">Parent location.</param>
 		public abstract void Draw(SpriteBatch spriteBatch, Vector2 parentLocation);
 	}
 }

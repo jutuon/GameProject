@@ -68,6 +68,7 @@
     <Compile Include="src\gameobjects\baseobjects\BasicGameObject.cs" />
     <Compile Include="src\gameobjects\baseobjects\DrawableBasicGameObject.cs" />
     <Compile Include="src\gameobjects\baseobjects\GameObject.cs" />
+    <Compile Include="src\ui\TextList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

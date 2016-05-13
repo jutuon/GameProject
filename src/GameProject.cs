@@ -29,7 +29,7 @@ namespace GameProject
 		private InGameWindow window;
 		private TextObject playerText;
 
-		public static TextObject debugText;
+		public static TextList debugTexts;
 
 		private TextureContainer textureContainer;
 
@@ -97,26 +97,24 @@ namespace GameProject
 			background = new Background(textureContainer[AvailibleTextures.StarBackground], collisionEngine);
 
 			window = new InGameWindow(Window);
-			playerText = new TextObject(font);
+			window.AlignmentX = WindowAlignmentX.Left;
 
-			TextObject cameraText = new TextObject(font);
-			cameraText.Position += new Vector2(200,50); window.Add(cameraText);
+			debugTexts = new TextList(font);
+			window.Add(debugTexts);
 
-			debugText = new TextObject(font);
-			debugText.Position -= new Vector2(50,0);
-			window.Add(playerText); window.Add(debugText);
-			window.AlignmentX = WindowAlignmentX.Center;
+			TextObject playerText = debugTexts.Add("text");
+			TextObject cameraText = debugTexts.Add("text");
 
 			player.ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				Player p = (Player) sender;
-				playerText.Text = "Player:\n" + p;
+				playerText.Text = "Player: " + p;
 			};
 
 			camera.ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				BasicGameObject p = (BasicGameObject) sender;
-				cameraText.Text = "Camera: \n" + p;
+				cameraText.Text = "Camera: " + p;
 			};
 
 			camera.Follow(player);

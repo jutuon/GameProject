@@ -23,7 +23,7 @@ namespace GameProject
 			if (IsStatic)
 			{
 				float scale = camera.Window.ClientBounds.Width * 1.0f / Texture.Width;
-				GameProject.debugText.Text = scale + "";
+				//GameProject.debugText.Text = scale + "";
 				Vector2 location1 = new Vector2(camera.Window.ClientBounds.Width / 2, camera.Window.ClientBounds.Height / 2);
 				spriteBatch.Draw(Texture, location1, sourceRectangle, Color.White, Angle, origin, scale, SpriteEffects.None, 1);
 
