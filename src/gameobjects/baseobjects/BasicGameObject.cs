@@ -38,7 +38,7 @@ namespace GameProject
 			float x = (float) Math.Cos(Angle)*amount;
 			float y = (float) Math.Sin(Angle)*amount;
 
-			Move(x, -y);
+			Move(new Vector2(x, -y));
 		}
 
 		public void Turn(float radians) { Angle += radians;}

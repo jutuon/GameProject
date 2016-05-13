@@ -28,7 +28,7 @@ namespace GameProject
 
 			if(collisionEngine.CheckCollision(this, newPosition, collisions)) return;
 
-			Position = newPosition;
+			base.Move(amount);
 		}
 
 		public void ForceMove(Vector2 amount)
