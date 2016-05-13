@@ -100,7 +100,7 @@ namespace GameProject
 			playerText = new TextObject(font);
 
 			TextObject cameraText = new TextObject(font);
-			cameraText.Position += new Vector2(200,0); window.Add(cameraText);
+			cameraText.Position += new Vector2(200,50); window.Add(cameraText);
 
 			debugText = new TextObject(font);
 			debugText.Position -= new Vector2(50,0);
@@ -110,13 +110,13 @@ namespace GameProject
 			player.ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				Player p = (Player) sender;
-				playerText.Text = p.Position + "";
+				playerText.Text = "Player:\n" + p;
 			};
 
 			camera.ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				BasicGameObject p = (BasicGameObject) sender;
-				cameraText.Text = "Camera: \n" + p.Position;
+				cameraText.Text = "Camera: \n" + p;
 			};
 
 			camera.Follow(player);

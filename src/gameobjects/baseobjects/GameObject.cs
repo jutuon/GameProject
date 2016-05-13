@@ -41,6 +41,12 @@ namespace GameProject
 		public void AddCollisionHandler(CollisionSetting setting) {
 			collisions.Add(setting);
 		}
+
+		public override string ToString()
+		{
+			return string.Format("Width={0}, Heigth={1}, ", Width, Heigth) + base.ToString();
+		}
+		
 	}
 }
 

@@ -56,6 +56,11 @@ namespace GameProject
 			EventHandler handler = ObjectMoved;
 			if (handler != null) handler(this, null);
 		}
+
+		public override string ToString()
+		{
+			return string.Format("Position={0}, Angle={1}", Position, Angle);
+		}
 	}
 }
 

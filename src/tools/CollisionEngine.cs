@@ -96,7 +96,7 @@ namespace GameProject
 			newPosition = newPosition + new Vector2(totalOffsetX, -totalOffsetY);
 			*/
 
-			Console.WriteLine(offset + targetoffset);
+			//Console.WriteLine(offset + targetoffset);
 
 			float distance = Vector2.Distance(newPosition, target.Position);
 			if (distance < (offset + targetoffset) / 2) return true;
