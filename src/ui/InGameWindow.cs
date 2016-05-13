@@ -42,7 +42,7 @@ namespace GameProject
 			AlignmentY = WindowAlignmentY.Top;
 		}
 
-		public void Add(Component c) {list.Add(c);}
+		public Component Add(Component c) {list.Add(c); return c;}
 		public void Remove(Component c) {list.Remove(c);}
 
 		public void Draw(SpriteBatch spriteBatch)
