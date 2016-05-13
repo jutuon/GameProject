@@ -4,45 +4,83 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject
 {
+
+	/// <summary>
+	/// Camera, converts world coordinates to screen coordinates
+	/// </summary>
 	public class Camera : BasicGameObject
 	{
-		private int width, heigth;
 		public GameWindow Window { get; private set;}
-
 		private BasicGameObject currentlyFollowing;
 
-		public Camera(int width, int heigth, GameWindow window)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GameProject.Camera"/> class.
+		/// </summary>
+		/// <param name="window">Game window where camera is used</param>
+		public Camera(GameWindow window)
 		{
-			this.width = width; this.heigth = heigth;
 			Window = window;
 		}
 
 
-		public Vector2? ToScreenCoordinants(DrawableBasicGameObject gameObject)
+		/// <summary>
+		/// Convert world coordinates to screen coordinates
+		/// </summary>
+		/// <returns>The screen coordinants.</returns>
+		/// <param name="gameObject">Game object</param>
+		public Vector2 ToScreenCoordinants(DrawableBasicGameObject gameObject)
 		{
-			//TODO: change null returning to exeption?
-
-			Vector2 screenPosition = (gameObject.Position - Position) * new Vector2(1,-1);
-			//check if out of object out of camera area
-			if (Math.Abs(screenPosition.X) > width + gameObject.Texture.Width || Math.Abs(screenPosition.Y) > heigth + gameObject.Texture.Height) return null;
-
-			//move to center
-			Vector2 screenCenter = new Vector2(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
-
-			return screenPosition + screenCenter;
+			return ToScreenCoordinants(gameObject.Position);
 		}
 
-		public Vector2? ToScreenCoordinants(Vector2 position)
+		/// <summary>
+		/// Convert world coordinates to screen coordinates
+		/// </summary>
+		/// <returns>The screen coordinants.</returns>
+		/// <param name="position">World coordinates</param>
+		public Vector2 ToScreenCoordinants(Vector2 position)
 		{
+			//calculate screen coordinates
+			Vector2 screenPosition = (position - Position) * new Vector2(1,-1);
 
-			Vector2 screenPosition = (position - this.Position) * new Vector2(1,-1);
-			if (Math.Abs(screenPosition.X) > width || Math.Abs(screenPosition.Y) > heigth) return null;
-			//move to center
-			Vector2 screenCenter = new Vector2(Window.ClientBounds.Width/2, Window.ClientBounds.Height/2);
+			//move object to center of the screen
+			Vector2 screenSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+			Vector2 final = screenPosition + screenSize/2;
 
-			return screenPosition + screenCenter;
+			return final;
 		}
 
+		/// <summary>
+		/// Are the screen coordinants on screen area.
+		/// </summary>
+		/// <returns><c>true</c>, if screen coordinants on screen was ared, <c>false</c> otherwise.</returns>
+		/// <param name="screenCoordinants">Screen coordinants.</param>
+		/// <param name="gameObject">Game object,</param>
+		public bool AreScreenCoordinantsOnScreen(Vector2 screenCoordinants, DrawableBasicGameObject gameObject = null)
+		{
+
+			Vector2 finalAndTextureLeft = screenCoordinants;
+			Vector2 finalAndTextureRight = screenCoordinants;
+
+			if (gameObject != null)
+			{
+				Vector2 textureSize = new Vector2(gameObject.Texture.Width/2, gameObject.Texture.Height/2);
+				finalAndTextureLeft += textureSize;
+				finalAndTextureRight -= textureSize;
+			}
+
+			if (finalAndTextureLeft.X < 0|| finalAndTextureRight.X > Window.ClientBounds.Width  || 
+				finalAndTextureLeft.Y < 0|| finalAndTextureRight.Y > Window.ClientBounds.Height ) return false;
+
+			return true;
+		}
+
+
+
+		/// <summary>
+		/// Follow the specified gameobject.
+		/// </summary>
+		/// <param name="gameobject">Gameobject</param>
 		public void Follow(BasicGameObject gameobject)
 		{
 
@@ -53,11 +91,15 @@ namespace GameProject
 			currentlyFollowing = gameobject;
 		}
 
-
+		/// <summary>
+		/// Method for ObjectMoved event
+		/// </summary>
+		/// <param name="sender">Sender</param>
+		/// <param name="e">E</param>
 		private void CopyPosition(object sender, EventArgs e)
 		{
-			BasicGameObject player = (BasicGameObject) sender;
-			Position = player.Position;
+			BasicGameObject gameobject = (BasicGameObject) sender;
+			Position = gameobject.Position;
 		}
 
 	}

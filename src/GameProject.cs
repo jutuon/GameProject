@@ -51,7 +51,7 @@ namespace GameProject
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
-			camera = new Camera(Window.ClientBounds.Width,Window.ClientBounds.Height, Window);
+			camera = new Camera(Window);
 
 			IsMouseVisible = true;
 			base.Initialize();
