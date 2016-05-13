@@ -8,12 +8,12 @@ namespace GameProject
 
 	//TODO:center according the window content width and heigth
 
-	public enum WindowPositionX
+	public enum WindowAlignmentX
 	{
 		Left, Center, Right
 	}
 
-	public enum WindowPositionY
+	public enum WindowAlignmentY
 	{
 		Top, Center, Bottom
 	}
@@ -24,8 +24,8 @@ namespace GameProject
 		public Vector2 Position { get; set;}
 
 		public bool IsVisible { get; set;}
-		public WindowPositionX PositionX { get; set;}
-		public WindowPositionY PositionY { get; set;}
+		public WindowAlignmentX AlignmentX { get; set;}
+		public WindowAlignmentY AlignmentY { get; set;}
 
 		public Texture2D Background { get; set;}
 
@@ -38,8 +38,8 @@ namespace GameProject
 			list = new List<Component>();
 			IsVisible = true;
 			this.window = window;
-			PositionX = WindowPositionX.Left;
-			PositionY = WindowPositionY.Top;
+			AlignmentX = WindowAlignmentX.Left;
+			AlignmentY = WindowAlignmentY.Top;
 		}
 
 		public void Add(Component c) {list.Add(c);}
@@ -70,12 +70,12 @@ namespace GameProject
 		private Vector2 CalculatePositionedCoordinates()
 		{
 			float x = Position.X;
-			if (PositionX == WindowPositionX.Right) x += window.ClientBounds.Width;
-			else if (PositionX == WindowPositionX.Center) x += window.ClientBounds.Width/2;
+			if (AlignmentX == WindowAlignmentX.Right) x += window.ClientBounds.Width;
+			else if (AlignmentX == WindowAlignmentX.Center) x += window.ClientBounds.Width/2;
 
 			float y = Position.Y;
-			if (PositionY == WindowPositionY.Bottom) x += window.ClientBounds.Height;
-			else if (PositionY == WindowPositionY.Center) x += window.ClientBounds.Height/2;
+			if (AlignmentY == WindowAlignmentY.Bottom) x += window.ClientBounds.Height;
+			else if (AlignmentY == WindowAlignmentY.Center) x += window.ClientBounds.Height/2;
 
 			return new Vector2(x, y);
 		}
