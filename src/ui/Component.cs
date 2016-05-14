@@ -16,6 +16,18 @@ namespace GameProject
 		/// <value>The position.</value>
 		public Vector2 Position {get; set;}
 
+		/// <summary>
+		/// Gets the height of component in pixels.
+		/// </summary>
+		/// <value>The height in pixels.</value>
+		public abstract int Height { get;}
+
+		/// <summary>
+		/// Gets the width of component in pixels.
+		/// </summary>
+		/// <value>The width of component in pixels.</value>
+		public abstract int Width { get;}
+
 		public Component()
 		{
 			Position = new Vector2(0,0);

@@ -35,18 +35,43 @@ namespace GameProject
 			}
 		}
 
+		private int height;
 		/// <summary>
-		/// Gets or sets the height of text list in pixels.
+		/// Gets the height of text list in pixels.
 		/// </summary>
 		/// <value>The height in pixels</value>
-		public int Height { get; private set;}
+		public override int Height
+		{
+			get
+			{
+				return height;
+			}
+		}
+
+		//TODO: implement width calculation in TextList
+		private int width;
+		/// <summary>
+		/// Gets the width of text list in pixels.
+		/// </summary>
+		/// <value>The width in pixels</value>
+		public override int Width
+		{
+			get
+			{
+				if (lineWidth <= 0) return width;
+
+				return lineWidth;
+			}
+		}
+
 
 		public TextList(SpriteFont font)
 		{
 			texts = new List<TextObject>();
 			this.font = font;
 			lineWidth = 0;
-			Height = 0;
+			height = 0;
+			width = 0;
 		}
 
 		/// <summary>
@@ -61,7 +86,7 @@ namespace GameProject
 
 			Console.WriteLine(textObject.Position);
 
-			Height += textObject.TextHeight;
+			height += textObject.Height;
 
 			texts.Add(textObject);
 
@@ -73,7 +98,7 @@ namespace GameProject
 		/// </summary>
 		public void Clear() {
 			texts.Clear();
-			Height = 0;
+			height = 0;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch, Vector2 parentLocation)

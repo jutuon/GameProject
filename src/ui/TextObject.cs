@@ -55,7 +55,7 @@ namespace GameProject
 		/// Gets the height of the text in pixels.
 		/// </summary>
 		/// <value>The height of the text in pixels.</value>
-		public int TextHeight
+		public override int Height
 		{
 			get
 			{
@@ -68,7 +68,7 @@ namespace GameProject
 		/// Gets the width of the text in pixels.
 		/// </summary>
 		/// <value>The width of the text in pixels.</value>
-		public int TextWidth
+		public override int Width
 		{
 			get
 			{
