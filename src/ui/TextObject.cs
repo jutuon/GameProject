@@ -27,7 +27,7 @@ namespace GameProject
 			set
 			{
 				text = value;
-				CalculateTextWrapping();
+				UpdateTextObjectState();
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace GameProject
 			set
 			{
 				font = value;
-				CalculateTextWrapping();
+				UpdateTextObjectState();
 			}
 		}
 
@@ -90,26 +90,25 @@ namespace GameProject
 			set
 			{
 				preferredLineWidth = value;
-				CalculateTextWrapping();
+				UpdateTextObjectState();
 			}
 		}
 
-
 		private String wrappedText;
 
-		public TextObject(Component parent, SpriteFont font, String text = "") : base(parent)
+		public TextObject(Component c, SpriteFont font, String text = "") : base(c)
 		{
 			this.font = font;
 			this.text = text;
 			wrappedText = text;
 
 			preferredLineWidth = 0;
-			CalculateTextWrapping();
+			UpdateTextObjectState();
 		}
 
 		public override void Draw(SpriteBatch spriteBatch, Vector2 parentLocation)
 		{
-			Vector2 location = Position + parentLocation;
+			Vector2 location = DrawingPosition + parentLocation;
 			spriteBatch.DrawString(Font, wrappedText, location, Color.White);
 		}
 
@@ -139,9 +138,16 @@ namespace GameProject
 			}
 
 			wrappedText = sb.ToString();
+		}
 
+
+		public void UpdateTextObjectState()
+		{
+			CalculateTextWrapping();
+			UpdateDrawingPosition();
 			Parent.Update();
 		}
+			
 	}
 }
 

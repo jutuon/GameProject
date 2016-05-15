@@ -35,7 +35,7 @@ namespace GameProject
 		}
 
 
-		public TextList(SpriteFont font) : base(null)
+		public TextList(Component c, SpriteFont font) : base(c)
 		{
 			this.font = font;
 			preferredLineWidth = 0;

@@ -96,14 +96,14 @@ namespace GameProject
 
 			window = new InGameWindow(Window);
 			window.AlignmentX = ComponentAlignmentX.Left;
+			window.AlignmentY = ComponentAlignmentY.Bottom;
 
-			debugTexts = new TextList(font);
+			debugTexts = window.CreateAndAddTextList(font);
 			debugTexts.PreferredLineWidth = 0;
-			window.Add(debugTexts);
 
 			TextObject playerText = debugTexts.Add("text");
 			TextObject cameraText = debugTexts.Add("text");
-
+			debugTexts.Add("text");debugTexts.Add("text");
 			player.ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				Player p = (Player) sender;
@@ -176,6 +176,8 @@ namespace GameProject
 			lasers.Draw(spriteBatch, gameTime, camera);
 
 			window.Draw(spriteBatch);
+
+			//debugTexts.Draw(spriteBatch, Vector2.Zero);
 
 			spriteBatch.End();
 

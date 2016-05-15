@@ -25,12 +25,33 @@ namespace GameProject
 
 		public Component Parent {get; protected set;}
 
+		private Vector2 position;
 		/// <summary>
 		/// Gets or sets the position on the screen.
 		/// </summary>
 		/// <value>The position.</value>
-		public Vector2 Position {get; set;}
+		public Vector2 Position {
+			get
+			{
+				return position;
+			}
+			set
+			{
+				position = value;
+				UpdateDrawingPosition();
+			}
+		}
 
+		protected Vector2 drawingPosition;
+		public Vector2 DrawingPosition {
+			get {
+				return drawingPosition;
+			}
+			set {
+				drawingPosition = value;
+				UpdateDrawingPosition();
+			}
+		}
 		/// <summary>
 		/// Gets the height of component in pixels.
 		/// </summary>
@@ -43,18 +64,57 @@ namespace GameProject
 		/// <value>The width of component in pixels.</value>
 		public abstract uint Width { get;}
 
-		public ComponentAlignmentX AlignmentX { get; set;}
-		public ComponentAlignmentY AlignmentY { get; set;}
+		private ComponentAlignmentX alignmentX;
+		public virtual ComponentAlignmentX AlignmentX 
+		{ 
+			get
+			{
+				return alignmentX;
+			}
+			set
+			{
+				alignmentX = value;
+				UpdateDrawingPosition();
+			}
+		}
+
+		private ComponentAlignmentY alignmentY;
+		public virtual ComponentAlignmentY AlignmentY {
+			get {
+				return alignmentY;
+			}
+			set {
+				alignmentY = value;
+				UpdateDrawingPosition();
+			}
+		}
 
 		public Component(Component parent)
 		{
 			Parent = parent;
 			Position = new Vector2(0,0);
+			drawingPosition = new Vector2(0,0);
+			alignmentX = ComponentAlignmentX.Left;
+			alignmentY = ComponentAlignmentY.Top;
 		}
 
 		public virtual void Update()
 		{
 			
+		}
+
+		protected virtual void UpdateDrawingPosition()
+		{
+			float x = Position.X + drawingPosition.X;
+			float y = Position.Y + drawingPosition.Y;
+
+			if (AlignmentX == ComponentAlignmentX.Center) x = -((Width+x)/2);
+			else if (AlignmentX == ComponentAlignmentX.Right) x = -(Width+x);
+
+			if (AlignmentY == ComponentAlignmentY.Center) y = -((Height+y) / 2);
+			else if (AlignmentY == ComponentAlignmentY.Bottom) y = -(Height+y);
+
+			drawingPosition = new Vector2(x, y);
 		}
 
 		/// <summary>
@@ -63,6 +123,7 @@ namespace GameProject
 		/// <param name="spriteBatch">Sprite batch.</param>
 		/// <param name="parentLocation">Parent location.</param>
 		public abstract void Draw(SpriteBatch spriteBatch, Vector2 parentLocation);
+
 	}
 
 
@@ -80,6 +141,7 @@ namespace GameProject
 			get
 			{
 				return height;
+
 			}
 		}
 
@@ -101,8 +163,33 @@ namespace GameProject
 			}
 		}
 
+		private ComponentAlignmentX alignmentX;
+		public override ComponentAlignmentX AlignmentX {
+			get {
+				return alignmentX;
+			}
+			set {
+				alignmentX = value;
+				foreach (var item in list) item.AlignmentX = value;
+			}
+		}
+
+		private ComponentAlignmentY alignmentY;
+		public override ComponentAlignmentY AlignmentY {
+			get {
+				return alignmentY;
+			}
+			set {
+				alignmentY = value;
+				foreach (var item in list) item.AlignmentY = value;
+			}
+		}
+			
+
 		public ComponentList(Component c) : base(c)
 		{
+			alignmentX = ComponentAlignmentX.Left;
+			alignmentY = ComponentAlignmentY.Top;
 			this.list = new List<T>();
 			height = 0;
 		}
@@ -113,10 +200,13 @@ namespace GameProject
 		/// is added to the list's height.
 		/// </summary>
 		/// <param name="component">Component.</param>
-		protected T Add(T component) {
+		public T Add(T component) {
 			list.Add(component);
-			component.Position += new Vector2(0, Height);
+			component.DrawingPosition += new Vector2(0, Height);
 			height += component.Height;
+
+			component.AlignmentX = alignmentX;
+			component.AlignmentY = alignmentY;
 
 			return component;
 		}
@@ -128,9 +218,11 @@ namespace GameProject
 			list.Clear();
 		}
 
+		public void Remove(T c) {list.Remove(c);}
+
 		public override void Draw(SpriteBatch spriteBatch, Vector2 parentLocation)
 		{
-			Vector2 location = Position + parentLocation;
+			Vector2 location = DrawingPosition + parentLocation;
 
 			foreach (var item in list)
 			{
@@ -145,10 +237,13 @@ namespace GameProject
 			for (int i = 0; i < list.Count; i++)
 			{
 				T item = list[i];
-				item.Position = new Vector2(0, height);
+				item.DrawingPosition = new Vector2(0, height);
 				height += item.Height;
 			}
 		}
+			
+
+		protected override void UpdateDrawingPosition() {}
 
 
 		public override void Update()
