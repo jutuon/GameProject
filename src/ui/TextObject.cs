@@ -55,12 +55,11 @@ namespace GameProject
 		/// Gets the height of the text in pixels.
 		/// </summary>
 		/// <value>The height of the text in pixels.</value>
-		public override int Height
+		public override uint Height
 		{
 			get
 			{
-				Vector2 textSize = Font.MeasureString(text);
-				return (int)textSize.Y * lines;
+				return (uint)Font.MeasureString(wrappedText).Y;
 			}
 		}
 
@@ -68,35 +67,43 @@ namespace GameProject
 		/// Gets the width of the text in pixels.
 		/// </summary>
 		/// <value>The width of the text in pixels.</value>
-		public override int Width
+		public override uint Width
 		{
 			get
 			{
-				Vector2 textSize = Font.MeasureString(text);
-				if (LineWidth <= 0) return (int) textSize.X;
-				return LineWidth;
+				return (uint)Font.MeasureString(wrappedText).X;
 			}
 		}
 
+		private uint preferredLineWidth;
 		/// <summary>
-		/// Gets or sets the line width for text wrapping.
+		/// Gets or sets the line width for text wrapping as pixels.
+		/// If user sets too small value, lines will be one letter width
 		/// </summary>
-		/// <value>The width of the line in pixels. Value 0 or negative value
-		/// disables text wrapping </value>
-		public int LineWidth { get; set;}
-		//TODO: too small line width makes endless loop
-
+		/// <value>The width of the line in pixels. Value 0 disables text wrapping </value>
+		public uint PreferredLineWidth
+		{
+			get
+			{
+				return preferredLineWidth;
+			} 
+			set
+			{
+				preferredLineWidth = value;
+				CalculateTextWrapping();
+			}
+		}
 
 
 		private String wrappedText;
-		private int lines = 1; //count of lines in wrapped text
 
 		public TextObject(SpriteFont font, String text = "") : base()
 		{
+			this.font = font;
 			this.text = text;
 			wrappedText = text;
-			this.font = font;
-			LineWidth = 0;
+
+			preferredLineWidth = 0;
 			CalculateTextWrapping();
 		}
 
@@ -108,37 +115,30 @@ namespace GameProject
 
 		private void CalculateTextWrapping()
 		{
-			if (LineWidth <= 0)
-			{
-				wrappedText = text;
-				return;
-			}
+			wrappedText = text;
+
+			if (PreferredLineWidth == 0) return;
 
 			//TODO: text wrapping by words
-			Vector2 textSize = Font.MeasureString(text);
+			float textWidth = Font.MeasureString(text).X;
+			if (textWidth <= PreferredLineWidth) return;
 
-			float textX = textSize.X;
+			float positionOfNewLineInPixels = textWidth / PreferredLineWidth;
+			int newLinePosition = (int) (text.Length / positionOfNewLineInPixels);
 
-			if (textX > LineWidth) {
-				int position = (int) textX / LineWidth;
+			StringBuilder sb = new StringBuilder(text);
 
-				int newLine = text.Length / position;
+			//if wrapping index is too small lets make lines one letter width
+			if (newLinePosition < 1) newLinePosition = 1;
 
-				StringBuilder sb = new StringBuilder(text);
+			int nextPosition = newLinePosition + 1;
 
-				lines = 1;
-				for (int i = newLine; i < sb.Length; i+=newLine)
-				{
-					sb.Insert(i, '\n');
-					lines++;
-				}
-
-				wrappedText = sb.ToString();
-				return;
+			for (int i = newLinePosition; i < sb.Length; i+=nextPosition)
+			{
+				sb.Insert(i, '\n');
 			}
 
-
-			wrappedText = text;
+			wrappedText = sb.ToString();
 
 		}
 	}

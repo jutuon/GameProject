@@ -9,7 +9,6 @@ using System.Collections.Generic;
 namespace GameProject
 {
 	//TODO: user interface, animations, "infinite" background, random asteroids, collision-detection. inputmanager, sounds and music
-	//TODO: add generics to event delegates
 
 	/// <summary>
 	/// This is the main type for your game.
@@ -50,7 +49,6 @@ namespace GameProject
 		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
 			camera = new Camera(Window);
 
 			IsMouseVisible = true;
@@ -167,8 +165,6 @@ namespace GameProject
 		protected override void Draw(GameTime gameTime)
 		{
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
-            
-			//TODO: Add your drawing code here
             
 			spriteBatch.Begin();
 

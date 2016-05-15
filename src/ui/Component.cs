@@ -20,13 +20,13 @@ namespace GameProject
 		/// Gets the height of component in pixels.
 		/// </summary>
 		/// <value>The height in pixels.</value>
-		public abstract int Height { get;}
+		public abstract uint Height { get;}
 
 		/// <summary>
 		/// Gets the width of component in pixels.
 		/// </summary>
 		/// <value>The width of component in pixels.</value>
-		public abstract int Width { get;}
+		public abstract uint Width { get;}
 
 		public Component()
 		{

@@ -14,33 +14,33 @@ namespace GameProject
 		private List<TextObject> texts;
 		private SpriteFont font;
 
-		private int lineWidth;
+		private uint preferredLineWidth;
 
 		/// <summary>
-		/// Gets or sets the width of the line in all texts.
+		/// Gets or sets the preferred width of the line in all texts.
 		/// </summary>
-		/// <value>The width of the line.</value>
-		public int LineWidth { 
+		/// <value>The width of the line in pixels</value>
+		public uint PreferredLineWidth { 
 			get
 			{
-				return lineWidth;
+				return preferredLineWidth;
 			}
 			set
 			{
 				foreach (var item in texts) {
-					item.LineWidth = value;
+					item.PreferredLineWidth = value;
 				}
-				lineWidth = value;
-				//TODO: update text list when linewidth is set
+				preferredLineWidth = value;
+				RePositionTexts();
 			}
 		}
 
-		private int height;
+		private uint height;
 		/// <summary>
 		/// Gets the height of text list in pixels.
 		/// </summary>
 		/// <value>The height in pixels</value>
-		public override int Height
+		public override uint Height
 		{
 			get
 			{
@@ -48,19 +48,22 @@ namespace GameProject
 			}
 		}
 
-		//TODO: implement width calculation in TextList
-		private int width;
+
 		/// <summary>
 		/// Gets the width of text list in pixels.
 		/// </summary>
 		/// <value>The width in pixels</value>
-		public override int Width
+		public override uint Width
 		{
 			get
 			{
-				if (lineWidth <= 0) return width;
-
-				return lineWidth;
+				uint maxWidth = 0;
+				foreach (var item in texts)
+				{
+					uint width = item.Width;
+					if (maxWidth < width) maxWidth = width;
+				}
+				return maxWidth;
 			}
 		}
 
@@ -69,9 +72,8 @@ namespace GameProject
 		{
 			texts = new List<TextObject>();
 			this.font = font;
-			lineWidth = 0;
+			preferredLineWidth = 0;
 			height = 0;
-			width = 0;
 		}
 
 		/// <summary>
@@ -80,7 +82,7 @@ namespace GameProject
 		/// <param name="text">Created TextObject.</param>
 		public TextObject Add(String text) {
 			TextObject textObject = new TextObject(font, text);
-			textObject.LineWidth = LineWidth;
+			textObject.PreferredLineWidth = PreferredLineWidth;
 
 			textObject.Position += new Vector2(0, Height);
 
@@ -108,6 +110,17 @@ namespace GameProject
 			foreach (var item in texts)
 			{
 				item.Draw(spriteBatch, location);
+			}
+		}
+
+		private void RePositionTexts()
+		{
+			height = 0;
+			for (int i = 0; i < texts.Count; i++)
+			{
+				TextObject item = texts[i];
+				item.Position = new Vector2(0, 0);
+				height += item.Height;
 			}
 		}
 	}
