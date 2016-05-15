@@ -95,9 +95,10 @@ namespace GameProject
 			background = new Background(textureContainer[AvailibleTextures.StarBackground], collisionEngine);
 
 			window = new InGameWindow(Window);
-			window.AlignmentX = WindowAlignmentX.Left;
+			window.AlignmentX = ComponentAlignmentX.Left;
 
 			debugTexts = new TextList(font);
+			debugTexts.PreferredLineWidth = 0;
 			window.Add(debugTexts);
 
 			TextObject playerText = debugTexts.Add("text");

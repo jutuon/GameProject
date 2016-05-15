@@ -97,7 +97,7 @@ namespace GameProject
 
 		private String wrappedText;
 
-		public TextObject(SpriteFont font, String text = "") : base()
+		public TextObject(Component parent, SpriteFont font, String text = "") : base(parent)
 		{
 			this.font = font;
 			this.text = text;
@@ -140,6 +140,7 @@ namespace GameProject
 
 			wrappedText = sb.ToString();
 
+			Parent.Update();
 		}
 	}
 }
