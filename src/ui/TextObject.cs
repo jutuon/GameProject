@@ -106,10 +106,9 @@ namespace GameProject
 			UpdateTextObjectState();
 		}
 
-		public override void Draw(SpriteBatch spriteBatch, Vector2 parentLocation)
+		public override void Draw(SpriteBatch spriteBatch)
 		{
-			Vector2 location = DrawingPosition + parentLocation;
-			spriteBatch.DrawString(Font, wrappedText, location, Color.White);
+			spriteBatch.DrawString(Font, wrappedText, drawingPosition, Color.White);
 		}
 
 		private void CalculateTextWrapping()
@@ -144,8 +143,7 @@ namespace GameProject
 		public void UpdateTextObjectState()
 		{
 			CalculateTextWrapping();
-			UpdateDrawingPosition();
-			Parent.Update();
+			Parent.CalculateDrawingPosition();
 		}
 			
 	}

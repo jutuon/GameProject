@@ -26,7 +26,6 @@ namespace GameProject
 		private SpriteFont font;
 
 		private InGameWindow window;
-		private TextObject playerText;
 
 		public static TextList debugTexts;
 
@@ -95,7 +94,7 @@ namespace GameProject
 			background = new Background(textureContainer[AvailibleTextures.StarBackground], collisionEngine);
 
 			window = new InGameWindow(Window);
-			window.AlignmentX = ComponentAlignmentX.Left;
+			window.AlignmentX = ComponentAlignmentX.Right;
 			window.AlignmentY = ComponentAlignmentY.Bottom;
 
 			debugTexts = window.CreateAndAddTextList(font);
@@ -103,6 +102,7 @@ namespace GameProject
 
 			TextObject playerText = debugTexts.Add("text");
 			TextObject cameraText = debugTexts.Add("text");
+			//cameraText.PositionOffset = new Vector2(100, 10);
 			debugTexts.Add("text");debugTexts.Add("text");
 			player.ObjectMoved += delegate(object sender, EventArgs e)
 			{
@@ -176,8 +176,6 @@ namespace GameProject
 			lasers.Draw(spriteBatch, gameTime, camera);
 
 			window.Draw(spriteBatch);
-
-			//debugTexts.Draw(spriteBatch, Vector2.Zero);
 
 			spriteBatch.End();
 

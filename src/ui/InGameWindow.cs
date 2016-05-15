@@ -18,7 +18,7 @@ namespace GameProject
 			list = new List<Component>();
 			IsVisible = true;
 			this.window = window;
-			window.ClientSizeChanged += (object sender, EventArgs e) => UpdateDrawingPosition();
+			window.ClientSizeChanged += (object sender, EventArgs e) => CalculateDrawingPosition();
 		}
 
 
@@ -29,37 +29,36 @@ namespace GameProject
 			return textList;
 		}
 
-		public void Draw(SpriteBatch spriteBatch)
+		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (!IsVisible) return;
 
 			//draw background
 			if (Background != null)
 			{
+				//TODO:test background drawing in InGameWindow
 				Vector2 origin = new Vector2(Background.Width / 2, Background.Height / 2);
 				Rectangle sourceRectangle = new Rectangle(0, 0, Background.Width, Background.Height);
 
-				spriteBatch.Draw(Background, DrawingPosition, sourceRectangle, Color.White, 0, origin, 1.0f, SpriteEffects.None, 1);
+				spriteBatch.Draw(Background, drawingPosition, sourceRectangle, Color.White, 0, origin, 1.0f, SpriteEffects.None, 1);
 			}
 			//draw window content
-			foreach (Component item in list)
-			{
-				item.Draw(spriteBatch, DrawingPosition);
-			}
-				
+			base.Draw(spriteBatch);
 		}
 			
-		protected override void UpdateDrawingPosition()
+		public override void CalculateDrawingPosition()
 		{
-			float x = Position.X;
+			float x = PositionOffset.X;
 			if (AlignmentX == ComponentAlignmentX.Right) x += window.ClientBounds.Width;
 			else if (AlignmentX == ComponentAlignmentX.Center) x += window.ClientBounds.Width/2;
 
-			float y = Position.Y;
+			float y = PositionOffset.Y;
 			if (AlignmentY == ComponentAlignmentY.Bottom) y += window.ClientBounds.Height;
 			else if (AlignmentY == ComponentAlignmentY.Center) y += window.ClientBounds.Height/2;
 
-			drawingPosition = new Vector2(x, y) + Position;
+			drawingPositionFromParent = new Vector2(x, y);
+
+			base.CalculateDrawingPosition();
 		}
 
 	}

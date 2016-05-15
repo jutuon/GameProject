@@ -30,7 +30,7 @@ namespace GameProject
 					item.PreferredLineWidth = value;
 				}
 				preferredLineWidth = value;
-				RePositionComponents();
+				CalculateDrawingPosition();
 			}
 		}
 
