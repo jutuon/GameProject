@@ -1,8 +1,15 @@
 # GameProject
 2D MonoGame game project.
 
+##Project Status
+Not currently playable.
+
+##Development Log
+13.6.2016 - implementing basic 2D game engine functions
+
 ##License
 Code: GPLv3
+
 Sprites and Audio: Creative Commons Attribution-ShareAlike 4.0 International License
 
 ##Building
