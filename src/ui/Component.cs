@@ -16,24 +16,79 @@ namespace GameProject
 		Top, Center, Bottom
 	}
 
-
-	/// <summary>
-	/// Base class for user interface components
-	/// </summary>
-	public abstract class Component
+	public interface IComponent
 	{
-
 		/// <summary>
-		/// Gets or sets the parent of the component.
+		/// Gets the parent of the component.
 		/// </summary>
 		/// <value>The parent.</value>
-		public Component Parent {get; protected set;}
+		IComponent Parent { get;}
 
-		private Vector2 positionOffset;
 		/// <summary>
 		/// Gets or sets the position on the screen.
 		/// </summary>
 		/// <value>The position.</value>
+		Vector2 PositionOffset { get; set;}
+
+		/// <summary>
+		/// The final drawing position.
+		/// </summary>
+		Vector2 DrawingPosition {get;}
+
+		/// <summary>
+		/// Gets or sets the drawing position set by component parent.
+		/// </summary>
+		/// <value>The drawing position from parent.</value>
+		Vector2 DrawingPositionFromParent { get; set;}
+
+		/// <summary>
+		/// Gets or sets components x-axis alignment.
+		/// </summary>
+		/// <value>The x-axis alignment.</value>
+		ComponentAlignmentX AlignmentX { get; set;}
+
+		/// <summary>
+		/// Gets or sets the y-axis alignment.
+		/// </summary>
+		/// <value>The y-axis alignment.</value>
+		ComponentAlignmentY AlignmentY { get; set; }
+
+		/// <summary>
+		/// Gets the height of component in pixels.
+		/// </summary>
+		/// <value>The height in pixels.</value>
+		uint Width {get;}
+
+		/// <summary>
+		/// Gets the width of component in pixels.
+		/// </summary>
+		/// <value>The width of component in pixels.</value>
+		uint Height {get;}
+
+		/// <summary>
+		/// Calculates the drawing position for component.
+		/// Component alignment and drawingPositionFromParent defines the
+		/// final drawing position
+		/// </summary>
+		void CalculateDrawingPosition();
+
+		/// <summary>
+		/// Draw the Component with specified spriteBatch.
+		/// </summary>
+		/// <param name="spriteBatch">Sprite batch.</param>
+		void Draw(SpriteBatch spriteBatch);
+		void Update();
+	}
+
+
+	/// <summary>
+	/// Base class for user interface components
+	/// </summary>
+	public abstract class Component : IComponent
+	{
+		public IComponent Parent {get; private set;}
+
+		private Vector2 positionOffset;
 		public Vector2 PositionOffset {
 			get
 			{
@@ -46,16 +101,10 @@ namespace GameProject
 			}
 		}
 
-		/// <summary>
-		/// The final drawing position.
-		/// </summary>
-		protected Vector2 drawingPosition;
 
-		protected Vector2 drawingPositionFromParent;
-		/// <summary>
-		/// Gets or sets the drawing position set by component parent.
-		/// </summary>
-		/// <value>The drawing position from parent.</value>
+		public Vector2 DrawingPosition { get; protected set;}
+
+		private Vector2 drawingPositionFromParent;
 		public Vector2 DrawingPositionFromParent
 		{
 			get
@@ -69,25 +118,13 @@ namespace GameProject
 			}
 		}
 
-		/// <summary>
-		/// Gets the height of component in pixels.
-		/// </summary>
-		/// <value>The height in pixels.</value>
-		public abstract uint Height { get;}
 
-		/// <summary>
-		/// Gets the width of component in pixels.
-		/// </summary>
-		/// <value>The width of component in pixels.</value>
+		public abstract uint Height { get;}
 		public abstract uint Width { get;}
 
 
-		protected ComponentAlignmentX alignmentX;
-		/// <summary>
-		/// Gets or sets components x-axis alignment.
-		/// </summary>
-		/// <value>The x-axis alignment.</value>
-		public virtual ComponentAlignmentX AlignmentX 
+		private ComponentAlignmentX alignmentX;
+		public ComponentAlignmentX AlignmentX 
 		{ 
 			get
 			{
@@ -100,12 +137,8 @@ namespace GameProject
 			}
 		}
 
-		protected ComponentAlignmentY alignmentY;
-		/// <summary>
-		/// Gets or sets the y-axis alignment.
-		/// </summary>
-		/// <value>The y-axis alignment.</value>
-		public virtual ComponentAlignmentY AlignmentY {
+		private ComponentAlignmentY alignmentY;
+		public ComponentAlignmentY AlignmentY {
 			get {
 				return alignmentY;
 			}
@@ -115,26 +148,16 @@ namespace GameProject
 			}
 		}
 
-		public Component(Component parent)
+		public Component(IComponent parent)
 		{
 			Parent = parent;
-			positionOffset = new Vector2(0,0);
-			drawingPosition = new Vector2(0,0);
 			alignmentX = ComponentAlignmentX.Left;
 			alignmentY = ComponentAlignmentY.Top;
+			positionOffset = Vector2.Zero;
+			DrawingPosition = Vector2.Zero;
+			drawingPositionFromParent = Vector2.Zero;
 		}
-
-		public virtual void Update()
-		{
 			
-		}
-
-
-		/// <summary>
-		/// Calculates the drawing position for component.
-		/// Component alignment and drawingPositionFromParent defines the
-		/// final drawing position
-		/// </summary>
 		public virtual void CalculateDrawingPosition()
 		{
 			float x = 0;
@@ -146,44 +169,65 @@ namespace GameProject
 			if (AlignmentY == ComponentAlignmentY.Center) y = -(Height / 2);
 			else if (AlignmentY == ComponentAlignmentY.Bottom) y = -Height;
 
-			drawingPosition = new Vector2(x, y) + PositionOffset + drawingPositionFromParent;
+			DrawingPosition = new Vector2(x, y) + PositionOffset + DrawingPositionFromParent;
 		}
 
-		/// <summary>
-		/// Draw the Component with specified spriteBatch.
-		/// </summary>
-		/// <param name="spriteBatch">Sprite batch.</param>
+
 		public abstract void Draw(SpriteBatch spriteBatch);
 
+		public virtual void Update() {}
 	}
 
 
 	/// <summary>
 	/// List of components
 	/// </summary>
-	public abstract class ComponentList<T> : Component where T : Component
+	public abstract class ComponentList<T> : IComponent where T : IComponent
 	{
 		protected List<T> list;
 
-		protected uint height;
+		public IComponent Parent { get; private set;}
+
+		private Vector2 positionOffset;
+		public Vector2 PositionOffset
+		{
+			get 
+			{
+				return positionOffset;
+			}
+			set
+			{
+				positionOffset = value;
+				CalculateDrawingPosition();
+			}
+		}
+			
+		public Vector2 DrawingPosition { get; private set;}
+
+		protected Vector2 drawingPositionFromParent;
+		public Vector2 DrawingPositionFromParent
+		{
+			get {
+				return drawingPositionFromParent;
+			}
+			set {
+				drawingPositionFromParent = value;
+				CalculateDrawingPosition();
+			}
+		}
+			
 		/// <summary>
 		/// Gets the height of component list in pixels.
 		/// </summary>
 		/// <value>The height in pixels</value>
-		public override uint Height
-		{
-			get
-			{
-				return height;
+		public uint Height { get; private set;}
 
-			}
-		}
 
 		/// <summary>
 		/// Gets the width of component list in pixels.
 		/// </summary>
 		/// <value>The width in pixels</value>
-		public override uint Width
+		public uint Width
 		{
 			get
 			{
@@ -196,37 +240,44 @@ namespace GameProject
 				return maxWidth;
 			}
 		}
-			
-		public override ComponentAlignmentX AlignmentX {
+
+		private ComponentAlignmentX alignmentX;
+		public ComponentAlignmentX AlignmentX {
 			get
 			{
 				return alignmentX;
 			}
 			set
 			{
-				foreach (var item in list) item.AlignmentX = value;
 				alignmentX = value;
-				CalculateDrawingPosition();
+				foreach (var item in list) item.AlignmentX = value;
 			}
 		}
-			
-		public override ComponentAlignmentY AlignmentY {
+
+		private ComponentAlignmentY alignmentY;
+		public ComponentAlignmentY AlignmentY {
 			get
 			{
 				return alignmentY;
 			}
 			set 
 			{
-				foreach (var item in list) item.AlignmentY = value;
 				alignmentY = value;
-				CalculateDrawingPosition();
+				foreach (var item in list) item.AlignmentY = value;
 			}
 		}
 
-		public ComponentList(Component c) : base(c)
+		public ComponentList(IComponent c)
 		{
 			this.list = new List<T>();
-			height = 0;
+			Parent = c;
+
+			Height = 0;
+			alignmentX = ComponentAlignmentX.Left;
+			alignmentY = ComponentAlignmentY.Top;
+			positionOffset = Vector2.Zero;
+			DrawingPosition = Vector2.Zero;
+			drawingPositionFromParent = Vector2.Zero;
 		}
 
 
@@ -240,7 +291,7 @@ namespace GameProject
 			component.AlignmentX = AlignmentX;
 			component.AlignmentY = AlignmentY;
 
-			SetComponentDrawingPositionFromParent(component, drawingPositionFromParent + PositionOffset);
+			SetComponentDrawingPositionFromParent(component, Height + component.Height);
 
 			return component;
 		}
@@ -262,7 +313,7 @@ namespace GameProject
 		/// Draw the Components in the list with specified spriteBatch.
 		/// </summary>
 		/// <param name="spriteBatch">Spritebatch.</param>
-		public override void Draw(SpriteBatch spriteBatch)
+		public virtual void Draw(SpriteBatch spriteBatch)
 		{
 			foreach (var item in list) item.Draw(spriteBatch);
 		}
@@ -270,23 +321,43 @@ namespace GameProject
 		/// <summary>
 		/// Calculates the drawing positions for all components in the list.
 		/// </summary>
-		public override void CalculateDrawingPosition()
+		public void CalculateDrawingPosition()
 		{
-			height = 0;
-			Vector2 location = PositionOffset + drawingPositionFromParent;
+			DrawingPosition = DrawingPositionFromParent + PositionOffset;
+
+			uint oldHeight = Height;
+			Height = 0;
+
+			if (list.Count == 1) 
+			{
+				SetComponentDrawingPositionFromParent(list[0]);
+				return;
+			}
+				
 			for (int i = 0; i < list.Count; i++)
 			{
 				T item = list[i];
-				SetComponentDrawingPositionFromParent(item, location);
+				SetComponentDrawingPositionFromParent(item, oldHeight);
 			}
 		}
 
-		private void SetComponentDrawingPositionFromParent(T component, Vector2 location)
+		private void SetComponentDrawingPositionFromParent(T component, uint listHeight = 0)
 		{
-			if (component.AlignmentY == ComponentAlignmentY.Top) component.DrawingPositionFromParent = new Vector2(0, height) + location;
-			else component.DrawingPositionFromParent = new Vector2(0, -height) + location;
-			height += component.Height;
+			if (component.AlignmentY == ComponentAlignmentY.Top) component.DrawingPositionFromParent = new Vector2(0, Height) + DrawingPosition;
+			else if (component.AlignmentY == ComponentAlignmentY.Center) {
+				float centerValue = 0;
+				if (list.Count > 1) {
+					float objectHeight = listHeight*1.0f/list.Count;
+					centerValue = objectHeight / 2 * (list.Count - 1);
+				}
+				component.DrawingPositionFromParent = new Vector2(0, Height - centerValue) + DrawingPosition;
+			} 
+			else component.DrawingPositionFromParent = new Vector2(0, -Height) + DrawingPosition;
+
+			Height += component.Height;
 		}
+
+		public virtual void Update() {}
 	}
 }
 

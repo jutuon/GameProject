@@ -96,7 +96,7 @@ namespace GameProject
 
 		private String wrappedText;
 
-		public TextObject(Component c, SpriteFont font, String text = "") : base(c)
+		public TextObject(IComponent c, SpriteFont font, String text = "") : base(c)
 		{
 			this.font = font;
 			this.text = text;
@@ -108,7 +108,7 @@ namespace GameProject
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.DrawString(Font, wrappedText, drawingPosition, Color.White);
+			spriteBatch.DrawString(Font, wrappedText, DrawingPosition, Color.White);
 		}
 
 		private void CalculateTextWrapping()

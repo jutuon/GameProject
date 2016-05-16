@@ -94,8 +94,8 @@ namespace GameProject
 			background = new Background(textureContainer[AvailibleTextures.StarBackground], collisionEngine);
 
 			window = new InGameWindow(Window);
-			window.AlignmentX = ComponentAlignmentX.Right;
-			window.AlignmentY = ComponentAlignmentY.Bottom;
+			window.AlignmentX = ComponentAlignmentX.Left;
+			window.AlignmentY = ComponentAlignmentY.Top;
 
 			debugTexts = window.CreateAndAddTextList(font);
 			debugTexts.PreferredLineWidth = 0;
