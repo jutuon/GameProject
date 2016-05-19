@@ -18,19 +18,23 @@ namespace GameProject
 		}
 
 
-		public void Shoot(GameObjectContainer<Laser> laserContainer, GameTime time)
+		public Laser Shoot(GameObjectContainer<Laser> laserContainer, GameTime time, Camera camera)
 		{
-			if (time.TotalGameTime.TotalSeconds < lastShotTime + 0.2) return;
+			if (time.TotalGameTime.TotalSeconds < lastShotTime + 0.2) return null;
 
 			Laser laser = new Laser(laserTexture, this, collisionEngine);
 			laser.MoveForward(5);
 
 			lastShotTime = time.TotalGameTime.TotalSeconds;
 			laserContainer.Add(laser);
-			laser.NotInAllowedArea += delegate(object sender, EventArgs e)
+			laser.OnDestroy += delegate(object sender, EventArgs e)
 			{
 				laserContainer.AddToBeRemoved((Laser)sender);
 			};
+
+			camera.AddToCamera(laser);
+
+			return laser;
 		}
 			
 	}

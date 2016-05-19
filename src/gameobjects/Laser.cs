@@ -9,7 +9,6 @@ namespace GameProject
 		private float lifeArea;
 		private String tag;
 
-		public event EventHandler NotInAllowedArea;
 
 		public Laser(Texture2D texture, BasicGameObject parent, CollisionEngine engine) : base(texture, engine)
 		{
@@ -22,15 +21,10 @@ namespace GameProject
 		{
 			MoveForward(5);
 
-			if (Position.X < -lifeArea || Position.X > lifeArea || Position.Y < -lifeArea || Position.Y > lifeArea) OnNotInAllowedArea();
+			if (Position.X < -lifeArea || Position.X > lifeArea || Position.Y < -lifeArea || Position.Y > lifeArea) Destroy();
 		}
 
-		private void OnNotInAllowedArea()
-		{
-			EventHandler handler = NotInAllowedArea;
 
-			if (handler != null) handler(this, null);
-		}
 	}
 }
 

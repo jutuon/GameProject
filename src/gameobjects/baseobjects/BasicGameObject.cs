@@ -10,11 +10,25 @@ namespace GameProject
 	public abstract class BasicGameObject : IUpdateable
 	{
 
-		public Vector2 Position { get; protected set;}
+		private Vector2 position;
+		public Vector2 Position
+		{
+			get
+			{ 
+				return position;
+			}
+			protected set
+			{
+				position = value;
+				OnObjectMoved();
+			}
+		}
+
 		public float Angle { get; protected set;}
 
 
 		public event EventHandler ObjectMoved;
+		public event EventHandler OnDestroy;
 
 		public BasicGameObject()
 		{
@@ -56,6 +70,13 @@ namespace GameProject
 			EventHandler handler = ObjectMoved;
 			if (handler != null) handler(this, null);
 		}
+
+		public void Destroy()
+		{
+			EventHandler handler = OnDestroy;
+			if (handler != null) handler(this, null);
+		}
+
 
 		public override string ToString()
 		{

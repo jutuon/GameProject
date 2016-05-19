@@ -1,17 +1,54 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace GameProject
 {
 
+	public class ScreenCoordinateInfo
+	{
+		public Vector2 ScreenCoords { get; private set;}
+		public bool OnScreen { get; private set;}
+		public DrawableBasicGameObject GameObject { get; private set;}
+		public Camera Camera { get; private set;}
+
+		public ScreenCoordinateInfo(DrawableBasicGameObject gameObject, Camera camera)
+		{
+			this.GameObject = gameObject;
+			this.ScreenCoords = Vector2.Zero;
+			this.OnScreen = false;
+			this.Camera = camera;
+
+			ReCalculate();
+			gameObject.ObjectMoved += UpdateObjectScreenCoordinates;
+			gameObject.OnDestroy += (object sender, EventArgs e) => camera.RemoveFromCamera(this);
+
+		}
+
+		private void UpdateObjectScreenCoordinates(object o, EventArgs ea)
+		{
+			ReCalculate();
+		}
+
+		public void ReCalculate()
+		{
+			ScreenCoords = Camera.ToScreenCoordinants(GameObject);
+			OnScreen = Camera.AreScreenCoordinantsOnScreen(ScreenCoords, GameObject);
+		}
+
+	}
+
 	/// <summary>
 	/// Camera, converts world coordinates to screen coordinates
 	/// </summary>
-	public class Camera : BasicGameObject
+	public class Camera : BasicGameObject, IDrawable
 	{
 		public GameWindow Window { get; private set;}
 		private BasicGameObject currentlyFollowing;
+
+		private List<ScreenCoordinateInfo> coordinates;
+
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GameProject.Camera"/> class.
@@ -20,6 +57,8 @@ namespace GameProject
 		public Camera(GameWindow window)
 		{
 			Window = window;
+			coordinates = new List<ScreenCoordinateInfo>();
+			ObjectMoved += (sender, e) => UpdateAllScreenCoordinates();
 		}
 
 
@@ -30,7 +69,7 @@ namespace GameProject
 		/// <param name="gameObject">Game object</param>
 		public Vector2 ToScreenCoordinants(DrawableBasicGameObject gameObject)
 		{
-			return ToScreenCoordinants(gameObject.Position);
+    		return ToScreenCoordinants(gameObject.Position);
 		}
 
 		/// <summary>
@@ -102,6 +141,29 @@ namespace GameProject
 			Position = gameobject.Position;
 		}
 
+
+		public DrawableBasicGameObject AddToCamera(DrawableBasicGameObject gameObject)
+		{
+			coordinates.Add(new ScreenCoordinateInfo(gameObject, this));
+			return gameObject;
+		}
+			
+
+		private void UpdateAllScreenCoordinates()
+		{
+			foreach (var item in coordinates) item.ReCalculate();
+		}
+
+		public void RemoveFromCamera(ScreenCoordinateInfo coordinateInfo)
+		{
+			coordinates.Remove(coordinateInfo);
+		}
+
+
+		public void Draw(SpriteBatch spriteBatch, GameTime time)
+		{
+			foreach (var item in coordinates) item.GameObject.Draw(spriteBatch, item);
+		}
 	}
 }
 

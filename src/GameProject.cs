@@ -20,8 +20,8 @@ namespace GameProject
 		private Camera camera;
 		private Player player;
 		private Background background;
-		private DrawableBasicGameObjectContainer<Asteroid> asteroids = new DrawableBasicGameObjectContainer<Asteroid>();
-		private DrawableBasicGameObjectContainer<Laser> lasers = new DrawableBasicGameObjectContainer<Laser>();
+		private GameObjectContainer<Asteroid> asteroids = new GameObjectContainer<Asteroid>();
+		private GameObjectContainer<Laser> lasers = new GameObjectContainer<Laser>();
 
 		private SpriteFont font;
 
@@ -60,12 +60,15 @@ namespace GameProject
 		/// </summary>
 		protected override void LoadContent()
 		{
+			textureContainer = new TextureContainer(this);
 			collisionEngine = new CollisionEngine();
+
+			background = new Background(textureContainer[AvailibleTextures.StarBackground], collisionEngine);
+			camera.AddToCamera(background);
 
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			textureContainer = new TextureContainer(this);
 
 			font = Content.Load<SpriteFont>("fonts/arial");
 
@@ -74,11 +77,12 @@ namespace GameProject
 
 			player = new Player(textureContainer[AvailibleTextures.SpaceShip], textureContainer[AvailibleTextures.Laser], collisionEngine);
 			player.ForceMove(new Vector2(0, 25));
-
+			camera.AddToCamera(player);
 			for (int i = 0; i < 1; i++)
 			{
 				Asteroid asteroid = new Asteroid(textureContainer[AvailibleTextures.Asteroid], collisionEngine);
 				asteroids.Add(asteroid);
+				camera.AddToCamera(asteroid);
 				collisionEngine.CreateAndAddCollisionHandler(player, asteroid, CollisionType.Circle, true);
 				asteroid.ForceMove(new Vector2(150, 50));
 				colum++;
@@ -89,10 +93,7 @@ namespace GameProject
 
 
 			};
-
-
-			background = new Background(textureContainer[AvailibleTextures.StarBackground], collisionEngine);
-
+				
 			window = new InGameWindow(Window);
 			window.AlignmentX = ComponentAlignmentX.Left;
 			window.AlignmentY = ComponentAlignmentY.Top;
@@ -150,7 +151,7 @@ namespace GameProject
 
 			if (state.IsKeyDown(Keys.Space))
 			{
-				player.Shoot(lasers, gameTime);
+				player.Shoot(lasers, gameTime, camera);
 			}
 
 
@@ -166,20 +167,12 @@ namespace GameProject
 		protected override void Draw(GameTime gameTime)
 		{
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
-            
 			spriteBatch.Begin();
 
-			background.Draw(spriteBatch, gameTime, camera);
-			player.Draw(spriteBatch, gameTime, camera);
-
-			asteroids.Draw(spriteBatch, gameTime, camera);
-			lasers.Draw(spriteBatch, gameTime, camera);
-
+			camera.Draw(spriteBatch, gameTime);
 			window.Draw(spriteBatch);
 
 			spriteBatch.End();
-
-
 			base.Draw(gameTime);
 		}
 	}
