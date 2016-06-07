@@ -24,7 +24,6 @@ namespace GameProject
 			}
 		}
 
-		public float Angle { get; set;}
 
 
 		public event EventHandler ObjectMoved;
@@ -33,7 +32,6 @@ namespace GameProject
 		public BasicGameObject()
 		{
 			Position = new Vector2(0, 0);
-			Angle = 0;
 		}
 
 		protected virtual void Move(Vector2 amount)
@@ -46,27 +44,7 @@ namespace GameProject
 		{
 			Move(new Vector2(x, y));
 		}
-
-		/// <summary>
-		/// Move the specified amount towards current direction
-		/// </summary>
-		/// <param name="amount">Amount.</param>
-		protected void Move(float amount)
-		{
-			float x = (float) Math.Cos(Angle)*amount;
-			float y = (float) Math.Sin(Angle)*amount;
-
-			Move(new Vector2(x, -y));
-		}
-
-		public void Turn(float radians) { Angle += radians;}
-
-		public void CloneState(BasicGameObject gameobject)
-		{
-			Position = gameobject.Position;
-			Angle = gameobject.Angle;
-		}
-
+			
 		public virtual void Update(GameTime time) {}
 
 		private void OnObjectMoved()
@@ -101,29 +79,13 @@ namespace GameProject
 			Move(-2, 0);
 		}
 
-		public virtual void TurnLeft()
-		{
-			Turn(-0.05f);
-		}
 
-		public virtual void TurnRight()
-		{
-			Turn(0.05f);
-		}
 
-		public virtual void MoveBackward()
-		{
-			Move(-2);
-		}
 
-		public virtual void MoveForward()
-		{
-			Move(2);
-		}
 
 		public override string ToString()
 		{
-			return string.Format("Position={0}, Angle={1}", Position, Angle);
+			return string.Format("Position={0}", Position);
 		}
 	}
 }

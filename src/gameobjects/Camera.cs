@@ -33,6 +33,7 @@ namespace GameProject
 
 		public void ReCalculate()
 		{
+			//TODO: recalculate coordinates only if object is close the camera
 			ScreenCoords = Camera.ToScreenCoordinants(GameObject);
 			OnScreen = Camera.AreScreenCoordinantsOnScreen(ScreenCoords, GameObject);
 		}

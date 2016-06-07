@@ -24,7 +24,7 @@ namespace GameProject
 			{
 				float scale = coordiantes.Camera.Window.ClientBounds.Width * 1.0f / Texture.Width;
 				Vector2 location1 = new Vector2(coordiantes.Camera.Window.ClientBounds.Width / 2, coordiantes.Camera.Window.ClientBounds.Height / 2);
-				spriteBatch.Draw(Texture, location1, sourceRectangle, Color.White, Angle, origin, scale, SpriteEffects.None, 1);
+				spriteBatch.Draw(Texture, location1, sourceRectangle, Color.White, DrawingAngle, origin, scale, SpriteEffects.None, 1);
 
 				return;
 			}

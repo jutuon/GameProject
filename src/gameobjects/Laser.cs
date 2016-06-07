@@ -10,7 +10,7 @@ namespace GameProject
 		private String tag;
 
 
-		public Laser(Texture2D texture, BasicGameObject parent, CollisionEngine engine, float startingPosition) : base(texture, engine)
+		public Laser(Texture2D texture, GameObject parent, CollisionEngine engine, float startingPosition) : base(texture, engine)
 		{
 			CloneState(parent);
 			lifeArea = 500;

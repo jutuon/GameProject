@@ -118,8 +118,6 @@ namespace GameProject
 				AddGameObject(asteroid);
 				asteroid.Position = position;
 				asteroid.Angle = angle;
-				//Console.WriteLine(position);
-
 			};
 		}
 
