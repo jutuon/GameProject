@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.Collections;
 
 namespace GameProject
 {
-	public class GameObjectContainer<T> : IUpdateable where T : BasicGameObject
+	public class GameObjectContainer<T> : IUpdateable, IEnumerable<T> where T : BasicGameObject
 	{
 
 		protected List<T> list;
@@ -43,6 +44,17 @@ namespace GameProject
 
 			toBeRemoved.Clear();
 		}
+
+		public IEnumerator<T> GetEnumerator()
+		{
+			return list.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return list.GetEnumerator();
+		}
+
 	}
 }
 
