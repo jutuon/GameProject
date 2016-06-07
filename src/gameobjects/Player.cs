@@ -7,32 +7,29 @@ namespace GameProject
 {
 	public class Player : GameObject
 	{
-
+		private GameWorld world;
 		private Texture2D laserTexture;
 		private double lastShotTime;
 
 
-		public Player(Texture2D texture, Texture2D laser, CollisionEngine engine) : base(texture, engine)
+		public Player(Texture2D texture, Texture2D laser, CollisionEngine engine, GameWorld world) : base(texture, engine)
 		{
 			laserTexture = laser;
+			this.world = world;
 		}
 
 
-		public Laser Shoot(GameObjectContainer<Laser> laserContainer, GameTime time, Camera camera)
+		public Laser Shoot(GameTime time)
 		{
 			if (time.TotalGameTime.TotalSeconds < lastShotTime + 0.2) return null;
 
-			Laser laser = new Laser(laserTexture, this, collisionEngine);
-			laser.MoveForward(5);
+			Laser laser = new Laser(laserTexture, this, collisionEngine, 5);
+
 
 			lastShotTime = time.TotalGameTime.TotalSeconds;
-			laserContainer.Add(laser);
-			laser.OnDestroy += delegate(object sender, EventArgs e)
-			{
-				laserContainer.AddToBeRemoved((Laser)sender);
-			};
 
-			camera.AddToCamera(laser);
+			world.AddGameObject(laser);
+
 
 			return laser;
 		}

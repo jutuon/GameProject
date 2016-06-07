@@ -24,7 +24,7 @@ namespace GameProject
 			collisions = new List<CollisionSetting>();
 		}
 
-		public override void Move(Vector2 amount)
+		protected override void Move(Vector2 amount)
 		{
 			Vector2 newPosition = amount + Position;
 

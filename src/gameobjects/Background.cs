@@ -9,7 +9,7 @@ namespace GameProject
 
 		public bool IsStatic { get; set;}
 
-		public Background(Texture2D texture, CollisionEngine engine) : base(texture)
+		public Background(Texture2D texture) : base(texture)
 		{
 			IsStatic = true;
 		}

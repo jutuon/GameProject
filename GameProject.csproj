@@ -68,6 +68,8 @@
     <Compile Include="src\gameobjects\baseobjects\DrawableBasicGameObject.cs" />
     <Compile Include="src\gameobjects\baseobjects\GameObject.cs" />
     <Compile Include="src\ui\TextList.cs" />
+    <Compile Include="src\tools\GameWorld.cs" />
+    <Compile Include="src\tools\InputManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

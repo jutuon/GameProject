@@ -10,16 +10,17 @@ namespace GameProject
 		private String tag;
 
 
-		public Laser(Texture2D texture, BasicGameObject parent, CollisionEngine engine) : base(texture, engine)
+		public Laser(Texture2D texture, BasicGameObject parent, CollisionEngine engine, float startingPosition) : base(texture, engine)
 		{
 			CloneState(parent);
 			lifeArea = 500;
+			Move(startingPosition);
 		}
 			
 
 		public override void Update(GameTime time)
 		{
-			MoveForward(5);
+			Move(5);
 
 			if (Position.X < -lifeArea || Position.X > lifeArea || Position.Y < -lifeArea || Position.Y > lifeArea) Destroy();
 		}

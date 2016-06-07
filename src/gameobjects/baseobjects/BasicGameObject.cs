@@ -36,18 +36,22 @@ namespace GameProject
 			Angle = 0;
 		}
 
-		public virtual void Move(Vector2 amount)
+		protected virtual void Move(Vector2 amount)
 		{
 			Position += amount;
 			OnObjectMoved();
 		}
 
-		public void Move(float x, float y)
+		protected void Move(float x, float y)
 		{
 			Move(new Vector2(x, y));
 		}
 
-		public void MoveForward(float amount)
+		/// <summary>
+		/// Move the specified amount towards current direction
+		/// </summary>
+		/// <param name="amount">Amount.</param>
+		protected void Move(float amount)
 		{
 			float x = (float) Math.Cos(Angle)*amount;
 			float y = (float) Math.Sin(Angle)*amount;
@@ -77,6 +81,45 @@ namespace GameProject
 			if (handler != null) handler(this, null);
 		}
 
+		public virtual void MoveUp()
+		{
+			Move(0, 2);
+		}
+
+		public virtual void MoveDown()
+		{
+			Move(0, -2);
+		}
+
+		public virtual void MoveRight()
+		{
+			Move(2, 0);
+		}
+
+		public virtual void MoveLeft()
+		{
+			Move(-2, 0);
+		}
+
+		public virtual void TurnLeft()
+		{
+			Turn(-0.05f);
+		}
+
+		public virtual void TurnRight()
+		{
+			Turn(0.05f);
+		}
+
+		public virtual void MoveBackward()
+		{
+			Move(-2);
+		}
+
+		public virtual void MoveForward()
+		{
+			Move(2);
+		}
 
 		public override string ToString()
 		{

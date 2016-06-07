@@ -12,6 +12,14 @@ namespace GameProject
 		protected List<T> list;
 		private List<T> toBeRemoved;
 
+		public int Count
+		{
+			get
+			{
+				return list.Count;
+			}
+		}
+
 		public GameObjectContainer()
 		{
 			list = new List<T>();
@@ -21,6 +29,11 @@ namespace GameProject
 		public void Add(T content)
 		{
 			list.Add(content);
+
+			content.OnDestroy += delegate(object sender, EventArgs e)
+			{
+				AddToBeRemoved((T) sender);
+			};
 		}
 
 		public void AddToBeRemoved(T content)

@@ -147,7 +147,14 @@ namespace GameProject
 			coordinates.Add(new ScreenCoordinateInfo(gameObject, this));
 			return gameObject;
 		}
-			
+
+		public void AddAllToCamera<T>(GameObjectContainer<T> container) where T : DrawableBasicGameObject
+		{
+			foreach (var item in container)
+			{
+				AddToCamera(item);
+			}
+		}
 
 		private void UpdateAllScreenCoordinates()
 		{

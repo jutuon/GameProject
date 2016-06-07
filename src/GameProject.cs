@@ -15,24 +15,17 @@ namespace GameProject
 	/// </summary>
 	public class GameProject : Game
 	{
-		private CollisionEngine collisionEngine;
+		private GameWorld gameWorld;
+		private InputManager inputManager;
 
-		private Camera camera;
-		private Player player;
-		private Background background;
-		private GameObjectContainer<Asteroid> asteroids = new GameObjectContainer<Asteroid>();
-		private GameObjectContainer<Laser> lasers = new GameObjectContainer<Laser>();
-
+		private TextureContainer textureContainer;
 		private SpriteFont font;
 
 		private InGameWindow window;
-
 		public static TextList debugTexts;
 
-		private TextureContainer textureContainer;
-
-		GraphicsDeviceManager graphics;
-		SpriteBatch spriteBatch;
+		private GraphicsDeviceManager graphics;
+		private SpriteBatch spriteBatch;
 
 		public GameProject()
 		{
@@ -48,52 +41,29 @@ namespace GameProject
 		/// </summary>
 		protected override void Initialize()
 		{
-			camera = new Camera(Window);
+			gameWorld = new GameWorld(Window);
+			inputManager = new InputManager(this);
 
 			IsMouseVisible = true;
 			base.Initialize();
 		}
-
+		public TextObject text;
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
 		/// all of your content.
 		/// </summary>
 		protected override void LoadContent()
 		{
-			textureContainer = new TextureContainer(this);
-			collisionEngine = new CollisionEngine();
-
-			background = new Background(textureContainer[AvailibleTextures.StarBackground], collisionEngine);
-			camera.AddToCamera(background);
-
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-
+			textureContainer = new TextureContainer(this);
 			font = Content.Load<SpriteFont>("fonts/arial");
 
-			int colum = -2;
-			int row = -5;
-
-			player = new Player(textureContainer[AvailibleTextures.SpaceShip], textureContainer[AvailibleTextures.Laser], collisionEngine);
-			player.ForceMove(new Vector2(0, 25));
-			camera.AddToCamera(player);
-			for (int i = 0; i < 1; i++)
-			{
-				Asteroid asteroid = new Asteroid(textureContainer[AvailibleTextures.Asteroid], collisionEngine);
-				asteroids.Add(asteroid);
-				camera.AddToCamera(asteroid);
-				collisionEngine.CreateAndAddCollisionHandler(player, asteroid, CollisionType.Circle, true);
-				asteroid.ForceMove(new Vector2(150, 50));
-				colum++;
-				if (colum > 2)
-				{
-					colum = -5; row++;
-				}
+			gameWorld.LoadLevel(textureContainer);
+			gameWorld.SetUserInput(inputManager);
 
 
-			};
-				
 			window = new InGameWindow(Window);
 			window.AlignmentX = ComponentAlignmentX.Left;
 			window.AlignmentY = ComponentAlignmentY.Top;
@@ -104,20 +74,23 @@ namespace GameProject
 			TextObject playerText = debugTexts.Add("text");
 			TextObject cameraText = debugTexts.Add("text");
 			//cameraText.PositionOffset = new Vector2(100, 10);
-			debugTexts.Add("text");debugTexts.Add("text");
-			player.ObjectMoved += delegate(object sender, EventArgs e)
+			debugTexts.Add("text");
+			text = debugTexts.Add("text");
+
+
+			gameWorld.GetPlayer(0).ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				Player p = (Player) sender;
 				playerText.Text = "Player: " + p;
 			};
 
-			camera.ObjectMoved += delegate(object sender, EventArgs e)
+			gameWorld.GetCamera(0).ObjectMoved += delegate(object sender, EventArgs e)
 			{
 				BasicGameObject p = (BasicGameObject) sender;
 				cameraText.Text = "Camera: " + p;
 			};
 
-			camera.Follow(player);
+
 		}
 			
 		/// <summary>
@@ -134,28 +107,10 @@ namespace GameProject
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 			#endif
             */
+			text.Text = gameWorld.ObjectCount() +"";
 
-			KeyboardState state = Keyboard.GetState();
-			if (state.IsKeyDown(Keys.Escape)) Exit();
-
-			if (state.IsKeyDown(Keys.Up)) camera.Move(0, 2);
-			if (state.IsKeyDown(Keys.Down)) camera.Move(0, -2);
-			if (state.IsKeyDown(Keys.Right)) camera.Move(2, 0);
-			if (state.IsKeyDown(Keys.Left)) camera.Move(-2, 0);
-
-
-			if (state.IsKeyDown(Keys.W)) player.MoveForward(2);
-			if (state.IsKeyDown(Keys.S)) player.MoveForward(-2);
-			if (state.IsKeyDown(Keys.D)) player.Turn(0.05f);
-			if (state.IsKeyDown(Keys.A)) player.Turn(-0.05f);
-
-			if (state.IsKeyDown(Keys.Space))
-			{
-				player.Shoot(lasers, gameTime, camera);
-			}
-
-
-			lasers.Update(gameTime);
+			inputManager.Update(gameTime);
+			gameWorld.Update(gameTime);
 
 			base.Update(gameTime);
 		}
@@ -169,7 +124,7 @@ namespace GameProject
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 			spriteBatch.Begin();
 
-			camera.Draw(spriteBatch, gameTime);
+			gameWorld.Draw(spriteBatch, gameTime);
 			window.Draw(spriteBatch);
 
 			spriteBatch.End();
