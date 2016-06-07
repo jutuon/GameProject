@@ -70,6 +70,8 @@
     <Compile Include="src\ui\TextList.cs" />
     <Compile Include="src\tools\GameWorld.cs" />
     <Compile Include="src\tools\InputManager.cs" />
+    <Compile Include="src\gameobjects\Spawner.cs" />
+    <Compile Include="src\tools\Timer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

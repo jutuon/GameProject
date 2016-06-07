@@ -8,7 +8,8 @@ namespace GameProject
 	{
 		private CollisionEngine collisionEngine;
 
-		private GameObjectContainer<GameObject> gameobjects;
+		private GameObjectContainer<BasicGameObject> basicGameobjects;
+		private GameObjectContainer<DrawableBasicGameObject> drawableGameobjects;
 		private GameObjectContainer<Camera> cameras;
 		private GameObjectContainer<Player> players;
 
@@ -20,6 +21,8 @@ namespace GameProject
 			}
 			set
 			{ 
+				if (background != null) background.Destroy();
+				
 				background = value;
 				AddToCameras(value);
 			}
@@ -32,7 +35,8 @@ namespace GameProject
 		/// <param name="window">Window.</param>
 		public GameWorld(GameWindow window)
 		{
-			gameobjects = new GameObjectContainer<GameObject>();
+			basicGameobjects = new GameObjectContainer<BasicGameObject>();
+			drawableGameobjects = new GameObjectContainer<DrawableBasicGameObject>();
 			cameras = new GameObjectContainer<Camera>();
 			players = new GameObjectContainer<Player>();
 
@@ -43,13 +47,13 @@ namespace GameProject
 
 		public void AddGameObject(GameObject gameobject)
 		{
-			gameobjects.Add(gameobject);
+			drawableGameobjects.Add(gameobject);
 			AddToCameras(gameobject);
 		}
 
 		public void AddCamera(Camera camera)
 		{
-			camera.AddAllToCamera<GameObject>(gameobjects);
+			camera.AddAllToCamera<DrawableBasicGameObject>(drawableGameobjects);
 			camera.AddAllToCamera<Player>(players);
 			cameras.Add(camera);
 		}
@@ -117,7 +121,7 @@ namespace GameProject
 
 		public void Update(GameTime time)
 		{
-			gameobjects.Update(time);
+			drawableGameobjects.Update(time);
 			players.Update(time);
 			cameras.Update(time);
 		}
@@ -131,7 +135,7 @@ namespace GameProject
 
 		public int ObjectCount()
 		{
-			return gameobjects.Count + players.Count + cameras.Count;
+			return drawableGameobjects.Count + players.Count + cameras.Count;
 		}
 	}
 }

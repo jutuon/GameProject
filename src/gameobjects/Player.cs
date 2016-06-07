@@ -9,11 +9,13 @@ namespace GameProject
 	{
 		private GameWorld world;
 		private Texture2D laserTexture;
-		private double lastShotTime;
+		private Timer timer;
 
 
 		public Player(Texture2D texture, Texture2D laser, CollisionEngine engine, GameWorld world) : base(texture, engine)
 		{
+			timer = new Timer();
+			timer.WaitingTime = 200;
 			laserTexture = laser;
 			this.world = world;
 		}
@@ -21,17 +23,16 @@ namespace GameProject
 
 		public Laser Shoot(GameTime time)
 		{
-			if (time.TotalGameTime.TotalSeconds < lastShotTime + 0.2) return null;
+			if (timer.TimeElapsed(time))
+			{
+				Laser laser = new Laser(laserTexture, this, collisionEngine, 5);
 
-			Laser laser = new Laser(laserTexture, this, collisionEngine, 5);
+				world.AddGameObject(laser);
 
+				return laser;
+			}
 
-			lastShotTime = time.TotalGameTime.TotalSeconds;
-
-			world.AddGameObject(laser);
-
-
-			return laser;
+			return null;
 		}
 			
 	}
