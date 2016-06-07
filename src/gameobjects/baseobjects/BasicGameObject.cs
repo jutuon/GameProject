@@ -17,14 +17,14 @@ namespace GameProject
 			{ 
 				return position;
 			}
-			protected set
+			set
 			{
 				position = value;
 				OnObjectMoved();
 			}
 		}
 
-		public float Angle { get; protected set;}
+		public float Angle { get; set;}
 
 
 		public event EventHandler ObjectMoved;
