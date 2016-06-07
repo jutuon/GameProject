@@ -64,7 +64,6 @@
     <Compile Include="src\tools\containers\ArrayContainer.cs" />
     <Compile Include="src\tools\containers\TextureContainer.cs" />
     <Compile Include="src\tools\containers\GameObjectContainer.cs" />
-    <Compile Include="src\tools\containers\DrawableBasicGameObjectContainer.cs" />
     <Compile Include="src\gameobjects\baseobjects\BasicGameObject.cs" />
     <Compile Include="src\gameobjects\baseobjects\DrawableBasicGameObject.cs" />
     <Compile Include="src\gameobjects\baseobjects\GameObject.cs" />
