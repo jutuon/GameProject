@@ -55,6 +55,15 @@ namespace GameProject
 			return list.GetEnumerator();
 		}
 
+
+		public T this[int i]
+		{
+			get 
+			{
+				return list[i];
+			}
+		}
+
 	}
 }
 
