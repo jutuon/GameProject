@@ -52,8 +52,13 @@ namespace GameProject
 		/// <returns>The screen coordinants.</returns>
 		public Vector2 ToScreenCoordinants()
 		{
+			return ToScreenCoordinants(GameObject.Position);
+		}
+
+		public Vector2 ToScreenCoordinants(Vector2 worldCoordinates)
+		{
 			//calculate screen coordinates
-			Vector2 screenPosition = (GameObject.Position - Camera.Position) * new Vector2(1,-1);
+			Vector2 screenPosition = (worldCoordinates - Camera.Position) * new Vector2(1,-1);
 
 			//move object to center of the screen
 			Vector2 screenSize = new Vector2(Camera.WindowWidth, Camera.WindowHeight);
@@ -156,7 +161,7 @@ namespace GameProject
 		{
 			foreach (var item in coordinates)
 			{
-				if (item.OnScreen) item.GameObject.Draw(spriteBatch, item);
+				item.GameObject.Draw(spriteBatch, item);
 			}
 		}
 

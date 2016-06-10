@@ -11,7 +11,7 @@ namespace GameProject
 
 		public Background(Texture2D texture) : base(texture)
 		{
-			IsStatic = true;
+			IsStatic = false;
 		}
 
 
@@ -29,19 +29,28 @@ namespace GameProject
 				return;
 			}
 
-			/*
-			float x = (camera.Position.X - camera.Window.ClientBounds.Width) / Texture.Width;
-			float y = (camera.Position.Y - camera.Window.ClientBounds.Height) / Texture.Height;
+			//TODO: precalculate infinite background drawing positions, save coordinates to ScreenCoordinateInfo?
+			float distanceX = coordiantes.Camera.Position.X - Position.X;
+			float distanceY = coordiantes.Camera.Position.Y - Position.Y;
 
-			Vector2? convertedCoordinates = camera.ToScreenCoordinants(new Vector2(x,y));
-			if (convertedCoordinates == null) return;
+			int picturesX = (int) distanceX / Texture.Width;
+			int picturesY = (int) distanceY / Texture.Height;
 
-			Vector2 location = (Vector2) convertedCoordinates;
+			Vector2 imageWorldCoordinates = new Vector2(picturesX * Texture.Width, picturesY * Texture.Height);
+
+			Vector2 baseLocation = coordiantes.ToScreenCoordinants(imageWorldCoordinates);
+
+			for (int row = -2 ; row <= 2; row++)
+			{
+				for (int colum = -2 ; colum <= 2; colum++)
+				{
+					Vector2 location = baseLocation + new Vector2(row * Texture.Width, colum * Texture.Height);
+					spriteBatch.Draw(Texture, location, sourceRectangle, Color.White, DrawingAngle, origin, 1.0f, SpriteEffects.None, 1);
+				}
+			}
 
 
 
-			spriteBatch.Draw(Texture, location, sourceRectangle, Color.White, Angle, origin, 1.0f, SpriteEffects.None, 1);
-			*/
 		}
 	}
 }

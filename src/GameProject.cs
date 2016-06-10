@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace GameProject
 {
-	//TODO: user interface, animations, "infinite" background, random asteroids, collision-detection. inputmanager, sounds and music
+	//TODO: user interface, animations, collision detection, sounds and music
 
 	/// <summary>
 	/// This is the main type for your game.

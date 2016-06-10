@@ -20,6 +20,8 @@ namespace GameProject
 
 		public virtual void Draw(SpriteBatch spriteBatch, ScreenCoordinateInfo coordinates)
 		{
+			if (!coordinates.OnScreen) return;
+
 			Vector2 origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
 			Rectangle sourceRectangle = new Rectangle(0, 0, Texture.Width, Texture.Height);
 
