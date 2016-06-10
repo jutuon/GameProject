@@ -13,6 +13,8 @@ namespace GameProject
 		public DrawableBasicGameObject GameObject { get; private set;}
 		public Camera Camera { get; private set;}
 
+		private bool update;
+
 		public ScreenCoordinateInfo(DrawableBasicGameObject gameObject, Camera camera)
 		{
 			this.GameObject = gameObject;
@@ -20,24 +22,59 @@ namespace GameProject
 			this.OnScreen = false;
 			this.Camera = camera;
 
-			ReCalculate();
-			gameObject.ObjectMoved += UpdateObjectScreenCoordinates;
+			update = true;
+			gameObject.ObjectMoved += (object sender, EventArgs e) => update = true;
 			gameObject.OnDestroy += (object sender, EventArgs e) => camera.RemoveFromCamera(this);
 
 		}
 
-		private void UpdateObjectScreenCoordinates(object o, EventArgs ea)
+		public void UpdateCoordinatesIfMoved()
 		{
-			ReCalculate();
+			if (update)
+			{
+				ReCalculate();
+				update = false;
+			}
 		}
 
 		public void ReCalculate()
 		{
 			//TODO: recalculate coordinates only if object is close the camera
-			ScreenCoords = Camera.ToScreenCoordinants(GameObject);
-			OnScreen = Camera.AreScreenCoordinantsOnScreen(ScreenCoords, GameObject);
+			OnScreen = IsObjectOnScreen();
+			if (OnScreen) ScreenCoords = ToScreenCoordinants();
+			update = false;
 		}
 
+
+		/// <summary>
+		/// Convert world coordinates to screen coordinates
+		/// </summary>
+		/// <returns>The screen coordinants.</returns>
+		public Vector2 ToScreenCoordinants()
+		{
+			//calculate screen coordinates
+			Vector2 screenPosition = (GameObject.Position - Camera.Position) * new Vector2(1,-1);
+
+			//move object to center of the screen
+			Vector2 screenSize = new Vector2(Camera.WindowWidth, Camera.WindowHeight);
+			Vector2 final = screenPosition + screenSize/2;
+
+			return final;
+		}
+
+		/// <summary>
+		/// Is the gameobject on the screen.
+		/// </summary>
+		/// <returns><c>true</c>, if gameobject is on screen, <c>false</c> otherwise.</returns>
+		public bool IsObjectOnScreen()
+		{
+			float distanceX = (-GameObject.Texture.Width) + Math.Abs(GameObject.Position.X - Camera.Position.X);
+			float distanceY = (-GameObject.Texture.Height) + Math.Abs(GameObject.Position.Y - Camera.Position.Y);
+		
+			if (distanceX <= Camera.WindowWidth/2  && distanceY <= Camera.WindowHeight/2) return true;
+
+			return false;
+		}
 	}
 
 	/// <summary>
@@ -51,6 +88,7 @@ namespace GameProject
 
 		private List<ScreenCoordinateInfo> coordinates;
 
+		private bool updateAll = false;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GameProject.Camera"/> class.
@@ -64,62 +102,8 @@ namespace GameProject
 				WindowWidth = window.ClientBounds.Width;
 			};
 			coordinates = new List<ScreenCoordinateInfo>();
-			ObjectMoved += (sender, e) => UpdateAllScreenCoordinates();
+			ObjectMoved += (sender, e) => updateAll = true;
 		}
-
-
-		/// <summary>
-		/// Convert world coordinates to screen coordinates
-		/// </summary>
-		/// <returns>The screen coordinants.</returns>
-		/// <param name="gameObject">Game object</param>
-		public Vector2 ToScreenCoordinants(DrawableBasicGameObject gameObject)
-		{
-    		return ToScreenCoordinants(gameObject.Position);
-		}
-
-		/// <summary>
-		/// Convert world coordinates to screen coordinates
-		/// </summary>
-		/// <returns>The screen coordinants.</returns>
-		/// <param name="position">World coordinates</param>
-		public Vector2 ToScreenCoordinants(Vector2 position)
-		{
-			//calculate screen coordinates
-			Vector2 screenPosition = (position - Position) * new Vector2(1,-1);
-
-			//move object to center of the screen
-			Vector2 screenSize = new Vector2(WindowWidth, WindowHeight);
-			Vector2 final = screenPosition + screenSize/2;
-
-			return final;
-		}
-
-		/// <summary>
-		/// Are the screen coordinants on screen area.
-		/// </summary>
-		/// <returns><c>true</c>, if screen coordinants on screen was ared, <c>false</c> otherwise.</returns>
-		/// <param name="screenCoordinants">Screen coordinants.</param>
-		/// <param name="gameObject">Game object,</param>
-		public bool AreScreenCoordinantsOnScreen(Vector2 screenCoordinants, DrawableBasicGameObject gameObject = null)
-		{
-
-			Vector2 finalAndTextureLeft = screenCoordinants;
-			Vector2 finalAndTextureRight = screenCoordinants;
-
-			if (gameObject != null)
-			{
-				Vector2 textureSize = new Vector2(gameObject.Texture.Width/2, gameObject.Texture.Height/2);
-				finalAndTextureLeft += textureSize;
-				finalAndTextureRight -= textureSize;
-			}
-
-			if (finalAndTextureLeft.X < 0|| finalAndTextureRight.X > WindowWidth  || 
-				finalAndTextureLeft.Y < 0|| finalAndTextureRight.Y > WindowHeight ) return false;
-
-			return true;
-		}
-
 
 
 		/// <summary>
@@ -162,11 +146,6 @@ namespace GameProject
 			}
 		}
 
-		private void UpdateAllScreenCoordinates()
-		{
-			foreach (var item in coordinates) item.ReCalculate();
-		}
-
 		public void RemoveFromCamera(ScreenCoordinateInfo coordinateInfo)
 		{
 			coordinates.Remove(coordinateInfo);
@@ -175,8 +154,22 @@ namespace GameProject
 
 		public void Draw(SpriteBatch spriteBatch, GameTime time)
 		{
-			foreach (var item in coordinates) item.GameObject.Draw(spriteBatch, item);
+			foreach (var item in coordinates)
+			{
+				if (item.OnScreen) item.GameObject.Draw(spriteBatch, item);
+			}
+		}
+
+		public override void Update(GameTime time)
+		{
+			if (updateAll){
+				foreach (var item in coordinates) item.ReCalculate();
+				updateAll = false;
+			}
+			else
+			{
+				foreach (var item in coordinates) item.UpdateCoordinatesIfMoved();
+			}
 		}
 	}
 }
-

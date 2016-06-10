@@ -109,7 +109,7 @@ namespace GameProject
 
 			Spawner spawner = new Spawner(true, true);
 			basicGameobjects.Add(spawner);
-			spawner.Time = 900;
+			spawner.Time = 500;
 			spawner.Area = new Rectangle(-500, -1500, 1000, 1000);
 
 			spawner.OnCreateObject += delegate(Vector2 position, float angle)
@@ -119,6 +119,7 @@ namespace GameProject
 				asteroid.Position = position;
 				asteroid.Angle = angle;
 			};
+				
 		}
 
 		public Player GetPlayer(int i)
@@ -135,8 +136,9 @@ namespace GameProject
 		{
 			drawableGameobjects.Update(time);
 			players.Update(time);
-			cameras.Update(time);
 			basicGameobjects.Update(time);
+
+			cameras.Update(time);
 		}
 
 		public void SetUserInput(InputManager input)
