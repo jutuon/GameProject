@@ -13,11 +13,18 @@ namespace GameProject
 		public Texture2D Background { get; set;}
 		private GameWindow window;
 
+		private int windowWidth, windowHeight;
+
 		public InGameWindow(GameWindow window) : base(null)
 		{
 			IsVisible = true;
 			this.window = window;
-			window.ClientSizeChanged += (object sender, EventArgs e) => CalculateWindowDrawingPosition();
+			window.ClientSizeChanged += delegate
+			{
+				windowWidth = window.ClientBounds.Width;
+				windowHeight = window.ClientBounds.Height;
+				CalculateWindowDrawingPosition();
+			};
 		}
 
 
@@ -48,12 +55,12 @@ namespace GameProject
 		private void CalculateWindowDrawingPosition()
 		{
 			float x = PositionOffset.X;
-			if (AlignmentX == ComponentAlignmentX.Right) x += window.ClientBounds.Width;
-			else if (AlignmentX == ComponentAlignmentX.Center) x += window.ClientBounds.Width/2;
+			if (AlignmentX == ComponentAlignmentX.Right) x += windowWidth;
+			else if (AlignmentX == ComponentAlignmentX.Center) x += windowWidth/2;
 
 			float y = PositionOffset.Y;
-			if (AlignmentY == ComponentAlignmentY.Bottom) y += window.ClientBounds.Height;
-			else if (AlignmentY == ComponentAlignmentY.Center) y += window.ClientBounds.Height/2;
+			if (AlignmentY == ComponentAlignmentY.Bottom) y += windowHeight;
+			else if (AlignmentY == ComponentAlignmentY.Center) y += windowHeight/2;
 
 			DrawingPositionFromParent = new Vector2(x, y);
 		}

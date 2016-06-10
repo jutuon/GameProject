@@ -45,7 +45,8 @@ namespace GameProject
 	/// </summary>
 	public class Camera : BasicGameObject, IDrawable
 	{
-		public GameWindow Window { get; private set;}
+		public int WindowWidth { get; private set;}
+		public int WindowHeight { get; private set;}
 		private BasicGameObject currentlyFollowing;
 
 		private List<ScreenCoordinateInfo> coordinates;
@@ -57,7 +58,11 @@ namespace GameProject
 		/// <param name="window">Game window where camera is used</param>
 		public Camera(GameWindow window)
 		{
-			Window = window;
+			window.ClientSizeChanged += delegate
+			{
+				WindowHeight = window.ClientBounds.Height;
+				WindowWidth = window.ClientBounds.Width;
+			};
 			coordinates = new List<ScreenCoordinateInfo>();
 			ObjectMoved += (sender, e) => UpdateAllScreenCoordinates();
 		}
@@ -84,7 +89,7 @@ namespace GameProject
 			Vector2 screenPosition = (position - Position) * new Vector2(1,-1);
 
 			//move object to center of the screen
-			Vector2 screenSize = new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height);
+			Vector2 screenSize = new Vector2(WindowWidth, WindowHeight);
 			Vector2 final = screenPosition + screenSize/2;
 
 			return final;
@@ -109,8 +114,8 @@ namespace GameProject
 				finalAndTextureRight -= textureSize;
 			}
 
-			if (finalAndTextureLeft.X < 0|| finalAndTextureRight.X > Window.ClientBounds.Width  || 
-				finalAndTextureLeft.Y < 0|| finalAndTextureRight.Y > Window.ClientBounds.Height ) return false;
+			if (finalAndTextureLeft.X < 0|| finalAndTextureRight.X > WindowWidth  || 
+				finalAndTextureLeft.Y < 0|| finalAndTextureRight.Y > WindowHeight ) return false;
 
 			return true;
 		}
