@@ -27,7 +27,7 @@ namespace GameProject
 			{
 				Laser laser = new Laser(laserTexture, this, collisionEngine, 5);
 
-				world.AddGameObject(laser);
+				world.AddGameObject(laser, true);
 
 				return laser;
 			}

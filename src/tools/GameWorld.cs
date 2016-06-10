@@ -51,6 +51,12 @@ namespace GameProject
 			AddToCameras(gameobject);
 		}
 
+		public void AddGameObject(GameObject gameobject, bool destroyIfNotOnCamera)
+		{
+			drawableGameobjects.Add(gameobject);
+			AddToCameras(gameobject, destroyIfNotOnCamera);
+		}
+
 		public void AddCamera(Camera camera)
 		{
 			camera.AddAllToCamera<DrawableBasicGameObject>(drawableGameobjects);
@@ -66,9 +72,14 @@ namespace GameProject
 
 		private void AddToCameras(DrawableBasicGameObject gameobject)
 		{
+			AddToCameras(gameobject, false);
+		}
+
+		private void AddToCameras(DrawableBasicGameObject gameobject, bool destroyIfNotOnCamera)
+		{
 			foreach (var item in cameras)
 			{
-				item.AddToCamera(gameobject);
+				item.Add(gameobject, destroyIfNotOnCamera);
 			}
 		}
 

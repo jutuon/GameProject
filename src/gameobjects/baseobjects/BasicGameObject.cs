@@ -24,7 +24,7 @@ namespace GameProject
 			}
 		}
 
-
+		public bool DestroyAtUpdate { get; set;}
 
 		public event EventHandler ObjectMoved;
 		public event EventHandler OnDestroy;
@@ -45,7 +45,9 @@ namespace GameProject
 			Move(new Vector2(x, y));
 		}
 			
-		public virtual void Update(GameTime time) {}
+		public virtual void Update(GameTime time) {
+			if (DestroyAtUpdate) Destroy();
+		}
 
 		private void OnObjectMoved()
 		{

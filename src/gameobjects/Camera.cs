@@ -14,13 +14,15 @@ namespace GameProject
 		public Camera Camera { get; private set;}
 
 		private bool update;
+		private bool destroyIfNotOnCamera;
 
-		public ScreenCoordinateInfo(DrawableBasicGameObject gameObject, Camera camera)
+		public ScreenCoordinateInfo(DrawableBasicGameObject gameObject, Camera camera, bool destroyIfNotOnCamera)
 		{
 			this.GameObject = gameObject;
 			this.ScreenCoords = Vector2.Zero;
 			this.OnScreen = false;
 			this.Camera = camera;
+			this.destroyIfNotOnCamera = destroyIfNotOnCamera;
 
 			update = true;
 			gameObject.ObjectMoved += (object sender, EventArgs e) => update = true;
@@ -42,6 +44,7 @@ namespace GameProject
 			//TODO: recalculate coordinates only if object is close the camera
 			OnScreen = IsObjectOnScreen();
 			if (OnScreen) ScreenCoords = ToScreenCoordinants();
+			else if (destroyIfNotOnCamera) GameObject.DestroyAtUpdate = true;
 			update = false;
 		}
 
@@ -137,9 +140,14 @@ namespace GameProject
 		}
 
 
-		public DrawableBasicGameObject AddToCamera(DrawableBasicGameObject gameObject)
+		public DrawableBasicGameObject Add(DrawableBasicGameObject gameObject)
 		{
-			coordinates.Add(new ScreenCoordinateInfo(gameObject, this));
+			return Add(gameObject, false);
+		}
+
+		public DrawableBasicGameObject Add(DrawableBasicGameObject gameObject, bool destroyIfNotOnCamera)
+		{
+			coordinates.Add(new ScreenCoordinateInfo(gameObject, this, destroyIfNotOnCamera));
 			return gameObject;
 		}
 
@@ -147,7 +155,7 @@ namespace GameProject
 		{
 			foreach (var item in container)
 			{
-				AddToCamera(item);
+				Add(item);
 			}
 		}
 
