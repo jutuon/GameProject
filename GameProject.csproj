@@ -72,6 +72,7 @@
     <Compile Include="src\tools\InputManager.cs" />
     <Compile Include="src\gameobjects\Spawner.cs" />
     <Compile Include="src\tools\Timer.cs" />
+    <Compile Include="src\tools\EventVariable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

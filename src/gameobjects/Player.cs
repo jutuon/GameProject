@@ -11,6 +11,7 @@ namespace GameProject
 		private Texture2D laserTexture;
 		private Timer timer;
 
+		public EventVariable<int> Score { get; private set;}
 
 		public Player(Texture2D texture, Texture2D laser, CollisionEngine engine, GameWorld world) : base(texture, engine)
 		{
@@ -18,6 +19,8 @@ namespace GameProject
 			timer.WaitingTime = 200;
 			laserTexture = laser;
 			this.world = world;
+
+			Score = new EventVariable<int>(0);
 		}
 
 

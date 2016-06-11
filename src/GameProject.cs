@@ -74,7 +74,7 @@ namespace GameProject
 			TextObject playerText = debugTexts.Add("text");
 			TextObject cameraText = debugTexts.Add("text");
 			//cameraText.PositionOffset = new Vector2(100, 10);
-			debugTexts.Add("text");
+			TextObject playerScore = debugTexts.Add("Score: ");
 			text = debugTexts.Add("text");
 
 
@@ -82,6 +82,11 @@ namespace GameProject
 			{
 				Player p = (Player) sender;
 				playerText.Text = "Player: " + p;
+			};
+
+			gameWorld.GetPlayer(0).Score.OnValueChanged += delegate(int value)
+			{
+				playerScore.Text = "Score: " + value;
 			};
 
 			gameWorld.GetCamera(0).ObjectMoved += delegate(object sender, EventArgs e)
